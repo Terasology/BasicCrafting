@@ -19,7 +19,5 @@ package org.terasology.crafting;
 public interface RecipeStore {
     Recipe getRecipe(int recipeID);
 
-    int putRecipe(Recipe recipe);
-
     int putRecipe(Recipe recipe, String category);
 }

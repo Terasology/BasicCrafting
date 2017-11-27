@@ -15,44 +15,45 @@
  */
 package org.terasology.crafting;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
-import org.terasology.engine.module.ModuleManager;
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.registry.CoreRegistry;
+import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
-import org.terasology.utilities.ReflectionUtil;
 
 
 @RegisterSystem
-public class TestSystem extends BaseComponentSystem {
+public class LoadRecipeSystem extends BaseComponentSystem {
     @In
-    RecipeStore recipeStore;
+    private RecipeStore recipeStore;
     @In
-    AssetManager assetManager;
+    private AssetManager assetManager;
 
     @Override
     public void postBegin() {
-        Logger logger = LoggerFactory.getLogger(TestSystem.class);
         for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
-            logger.info(prefab.getName());
             for (Component component : prefab.iterateComponents()) {
                 if (RecipeComponent.class.isAssignableFrom(component.getClass())) {
-                    loadComponent(prefab, component);
+                    loadRecipeComponent(component);
                 }
             }
         }
 
     }
 
-    private void loadComponent(Prefab prefab, Component genericComponent) {
+    private void loadRecipeComponent(Component genericComponent) {
         RecipeComponent component = (RecipeComponent) genericComponent;
-        component.getRecipes();
+        for (Recipe recipe : component.getRecipes()) {
+            recipeStore.putRecipe(recipe, component.getCategory());
+        }
     }
 
-
+    @ReceiveEvent
+    public void onActivate(ActivateEvent event, EntityRef entity) {
+        recipeStore.getRecipe(0);
+    }
 }

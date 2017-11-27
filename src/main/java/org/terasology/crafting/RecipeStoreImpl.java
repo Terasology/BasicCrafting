@@ -55,9 +55,4 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         return index;
     }
 
-    public int putRecipe(Recipe recipe) {
-        return putRecipe(recipe, "default");
-    }
-
-
 }

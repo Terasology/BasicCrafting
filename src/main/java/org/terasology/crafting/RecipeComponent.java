@@ -15,9 +15,8 @@
  */
 package org.terasology.crafting;
 
-
-import java.util.List;
-
 public interface RecipeComponent {
-    List<? extends Recipe> getRecipes();
+    Recipe[] getRecipes();
+
+    String getCategory();
 }
