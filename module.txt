@@ -4,6 +4,12 @@
     "author" : "",
     "displayName" : "Crafting",
     "description" : "",
-    "dependencies" : [],
+    "dependencies" : [
+         {
+             "id" : "Core",
+             "minVersion" : "1.0.0"
+         }
+
+     ],
     "serverSideOnly" : false
 }

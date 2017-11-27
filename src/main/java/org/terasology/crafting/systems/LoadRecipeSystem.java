@@ -65,9 +65,4 @@ public class LoadRecipeSystem extends BaseComponentSystem {
             recipeStore.putRecipe(recipe, component.getCategory());
         }
     }
-
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-        recipeStore.getRecipe(0);
-    }
 }
