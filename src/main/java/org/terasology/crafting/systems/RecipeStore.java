@@ -24,17 +24,28 @@ import org.terasology.crafting.components.Recipe;
 public interface RecipeStore {
     /**
      * Get a recipe given it's id
+     *
      * @param recipeID The id of the recipe
      * @return The recipe or null if it wasn't found
      */
     Recipe getRecipe(int recipeID);
 
     /**
+     * Get the list of recipes associated with the given category
+     *
+     * @param category The category to look for
+     * @return All recipes associated with it.
+     */
+    Recipe[] getRecipes(String category);
+
+    /**
      * Adds a recipe to the store.
      *
-     * @param recipe The recipe to add
+     * @param recipe   The recipe to add
      * @param category The category to add it under
      * @return The id of the recipe.
      */
     int putRecipe(Recipe recipe, String category);
+
+    boolean hasCategory(String category);
 }

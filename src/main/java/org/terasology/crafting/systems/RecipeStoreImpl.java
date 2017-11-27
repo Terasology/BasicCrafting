@@ -29,7 +29,7 @@ import java.util.Map;
 
 @Share(RecipeStore.class)
 @RegisterSystem
-public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore  {
+public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore {
 
     private List<Recipe> recipeList = new ArrayList<>();
     private Map<String, List<Integer>> categoryLookup = new HashMap<>();
@@ -39,6 +39,27 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
             return recipeList.get(recipeID);
         }
         return null;
+    }
+
+    @Override
+    public boolean hasCategory(String category) {
+        return categoryLookup.containsKey(category.toLowerCase());
+    }
+
+    public Recipe[] getRecipes(String category) {
+        category = category.toLowerCase();
+        if (categoryLookup.containsKey(category)) {
+            List<Integer> indicies = categoryLookup.get(category);
+            Recipe[] recipes = new Recipe[indicies.size()];
+            int i = 0;
+            for (int index : indicies) {
+                recipes[i] = recipeList.get(index);
+                i++;
+            }
+            return recipes;
+        } else {
+            return null;
+        }
     }
 
     public int putRecipe(Recipe recipe, String category) {

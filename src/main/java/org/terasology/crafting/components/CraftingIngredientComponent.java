@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting.listCrafting.components;
+package org.terasology.crafting.components;
 
 import org.terasology.entitySystem.Component;
 

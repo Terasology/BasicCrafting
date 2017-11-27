@@ -17,7 +17,7 @@ package org.terasology.crafting.systems;
 
 import com.google.common.collect.Iterables;
 import org.terasology.assets.management.AssetManager;
-import org.terasology.crafting.listCrafting.components.CraftingIngredientComponent;
+import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
