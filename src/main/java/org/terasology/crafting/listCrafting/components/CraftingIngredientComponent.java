@@ -17,6 +17,10 @@ package org.terasology.crafting.listCrafting.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Provides another name that an be used to specify this item in a recipe
+ * This name can be used for multiple different items.
+ */
 public class CraftingIngredientComponent implements Component {
     public String id = "";
 }

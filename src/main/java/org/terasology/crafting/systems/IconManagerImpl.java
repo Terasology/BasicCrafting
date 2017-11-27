@@ -16,8 +16,6 @@
 package org.terasology.crafting.systems;
 
 import com.google.common.collect.Iterables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.crafting.listCrafting.components.CraftingIngredientComponent;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -50,7 +48,6 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
     private Map<String, Set<TextureRegion>> iconMap = new HashMap<>();
     private Map<String, Set<Mesh>> meshMap = new HashMap<>();
     private Texture texture;
-    private boolean builtStores;
 
     @In
     private AssetManager assetManager;
@@ -61,16 +58,23 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
 
     private BlockExplorer blockExplorer;
 
-    public void buildStores() {
-        if (!builtStores) {
-            blockExplorer = new BlockExplorer(assetManager);
-            loadItems();
-            loadBlocks();
-            builtStores = true;
-        }
+    /**
+     * Called just before the world is loaded.
+     * Used to initiate retrieving all the icons
+     */
+    @Override
+    public void postBegin() {
+        blockExplorer = new BlockExplorer(assetManager);
+        loadItems();
+        loadBlocks();
     }
 
-
+    /**
+     * Get's all meshes associated with a key
+     *
+     * @param key The key to use
+     * @return All the Meshes found or null if the key doesn't exist.
+     */
     public Set<Mesh> getMesh(String key) {
         key = key.toLowerCase();
         if (meshMap.containsKey(key)) {
@@ -80,6 +84,12 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         }
     }
 
+    /**
+     * Get all icons associated with a key
+     *
+     * @param key The key to use
+     * @return All Icons found or null if the key doesn't exist.
+     */
     public Set<TextureRegion> getIcon(String key) {
         key = key.toLowerCase();
         if (iconMap.containsKey(key)) {
@@ -89,21 +99,42 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         }
     }
 
+    /**
+     * Check if there are any icons associated with the key
+     *
+     * @param key The key to look for
+     * @return True if the key exists, false otherwise
+     */
     public boolean hasIcon(String key) {
         key = key.toLowerCase();
         return iconMap.containsKey(key);
     }
 
+    /**
+     * Check if there are any Meshes associated with the key
+     *
+     * @param key The key to look for
+     * @return True if the key exists, false otherwise
+     */
     public boolean hasMesh(String key) {
         key = key.toLowerCase();
         return meshMap.containsKey(key);
     }
 
+    /**
+     * Get the texture to use for the Meshes.
+     *
+     * @return The Texture to use.
+     */
     public Texture getTexture() {
         return texture;
     }
 
-
+    /**
+     * Searches through all the prefabs for Icons to use.
+     * If a prefab has an ItemComponent then the `icon` field of that component is added to the store.
+     * It is associated with the prefab name and with the `id` field of a CraftingIngredientComponent if one exists.
+     */
     private void loadItems() {
         for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
             if (prefab.hasComponent(ItemComponent.class)) {
@@ -131,6 +162,12 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         }
     }
 
+    /**
+     * Load all the meshes for all blocks.
+     * This only uses one mesh per block family and hence all blocks in a family are treated as the same.
+     * <p>
+     * The mesh is associated with the block family's URI
+     */
     private void loadBlocks() {
         Set<BlockUri> blocks = new HashSet<>();
 
@@ -155,6 +192,12 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         texture = terrainTex.orElseGet(() -> Assets.getTexture("engine:default").get());
     }
 
+    /**
+     * Links an icon to the given key
+     *
+     * @param key   The key to use
+     * @param value The icon to use
+     */
     private void addIconPair(String key, TextureRegion value) {
         Set<TextureRegion> iconList;
         if (iconMap.containsKey(key)) {
@@ -166,6 +209,12 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         iconMap.put(key, iconList);
     }
 
+    /**
+     * Links a mesh to a given key
+     *
+     * @param key   The key to use
+     * @param value The icon to use
+     */
     private void addMeshPair(String key, Mesh value) {
         Set<Mesh> meshList;
         if (iconMap.containsKey(key)) {

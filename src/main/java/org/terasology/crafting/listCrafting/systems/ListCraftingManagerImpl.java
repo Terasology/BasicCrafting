@@ -16,6 +16,7 @@
 package org.terasology.crafting.listCrafting.systems;
 
 import org.terasology.crafting.components.Recipe;
+import org.terasology.crafting.listCrafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -94,6 +95,10 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
             }
             if (item.equalsIgnoreCase(slotItem.getParentPrefab().getName())) {
                 return i;
+            } else if (slotItem.hasComponent(CraftingIngredientComponent.class)) {
+                if (item.equalsIgnoreCase(slotItem.getComponent(CraftingIngredientComponent.class).id)) {
+                    return i;
+                }
             } else if (slotItem.hasComponent(BlockItemComponent.class)) {
                 if (item.equalsIgnoreCase(slotItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
                     return i;
