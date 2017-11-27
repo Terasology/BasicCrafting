@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting;
+package org.terasology.crafting.components;
 
+/**
+ * The interface to represent a base component type
+ */
+public interface RecipeComponent {
+    /**
+     * Get all the recipes stored in this component
+     * @return The array of recipes
+     */
+    Recipe[] getRecipes();
 
-public interface RecipeStore {
-    Recipe getRecipe(int recipeID);
-
-    int putRecipe(Recipe recipe, String category);
+    /**
+     * Get the category to place these recipes into
+     * @return The category id
+     */
+    String getCategory();
 }

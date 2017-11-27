@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting;
+package org.terasology.crafting.listCrafting.components;
 
 
+import org.terasology.crafting.components.Recipe;
+import org.terasology.crafting.components.RecipeComponent;
 import org.terasology.entitySystem.Component;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-
+/**
+ * Component that is used to enter the ListRecipe's
+ */
 public class ListRecipesComponent implements Component, RecipeComponent {
 
     public String category = "InHand";

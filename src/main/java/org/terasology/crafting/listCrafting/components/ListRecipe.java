@@ -13,12 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting;
+package org.terasology.crafting.listCrafting.components;
 
-import org.terasology.reflection.MappedContainer;
+
+import org.terasology.crafting.components.Recipe;
 
 import java.util.Map;
 
+/**
+ * Represents a List Recipe.
+ * Simply a list of inputs and a single output.
+ */
 public class ListRecipe implements Recipe {
     public String[] inputItems;
     public int[] inputCounts;

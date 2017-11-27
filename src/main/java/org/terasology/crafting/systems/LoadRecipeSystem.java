@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting;
+package org.terasology.crafting.systems;
 
 import org.terasology.assets.management.AssetManager;
+import org.terasology.crafting.components.Recipe;
+import org.terasology.crafting.components.RecipeComponent;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -26,6 +28,9 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 
 
+/**
+ * Loads recipes from prefabs.
+ */
 @RegisterSystem
 public class LoadRecipeSystem extends BaseComponentSystem {
     @In
@@ -33,6 +38,11 @@ public class LoadRecipeSystem extends BaseComponentSystem {
     @In
     private AssetManager assetManager;
 
+    /**
+     * Called after the systems have all been setup
+     * Searches all prefabs for any components that implement RecipeComponent.
+     * If it finds a matching component then it attempts to add all recipes from it to the RecipeStore.
+     */
     @Override
     public void postBegin() {
         for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
@@ -45,6 +55,10 @@ public class LoadRecipeSystem extends BaseComponentSystem {
 
     }
 
+    /**
+     * Adds the recipes from a RecipeComponent to the RecipeStore
+     * @param genericComponent The component to add from.
+     */
     private void loadRecipeComponent(Component genericComponent) {
         RecipeComponent component = (RecipeComponent) genericComponent;
         for (Recipe recipe : component.getRecipes()) {

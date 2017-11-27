@@ -13,13 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting;
+package org.terasology.crafting.systems;
+
 
 import org.terasology.crafting.components.Recipe;
 
 /**
- * Test second recipe type
+ * Provides a centralised store for all recipes.
  */
-public class PatternRecipe implements Recipe {
+public interface RecipeStore {
+    /**
+     * Get a recipe given it's id
+     * @param recipeID The id of the recipe
+     * @return The recipe or null if it wasn't found
+     */
+    Recipe getRecipe(int recipeID);
 
+    /**
+     * Adds a recipe to the store.
+     *
+     * @param recipe The recipe to add
+     * @param category The category to add it under
+     * @return The id of the recipe.
+     */
+    int putRecipe(Recipe recipe, String category);
 }
