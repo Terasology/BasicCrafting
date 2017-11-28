@@ -1,0 +1,25 @@
+{
+  "text-shadowed": true,
+  "inherit": "inventoryDefault",
+  "font": "NotoSans-Regular",
+  "elements": {
+    "UIRecipeList": {
+      "background": "engine:area",
+      "background-border": {
+        "top": 4,
+        "bottom": 4,
+        "left": 4,
+        "right": 4
+      }
+    },
+    "UIRecipeView": {
+      "background": "engine:area",
+      "background-border": {
+        "top": 4,
+        "bottom": 4,
+        "left": 4,
+        "right": 4
+      }
+    }
+  }
+}

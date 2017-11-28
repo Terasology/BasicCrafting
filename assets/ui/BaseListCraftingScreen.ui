@@ -1,0 +1,19 @@
+{
+  "type": "BaseListCraftingScreen",
+  "skin": "BaseListSkin",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIWorkstationView",
+        "id": "workstationView",
+        "layoutInfo": {
+          "use-content-width": true,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        }
+      }
+    ]
+  }
+}
