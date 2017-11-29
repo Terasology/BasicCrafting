@@ -1,5 +1,6 @@
 {
   "ListRecipes": {
+    "category": "TestOne",
     "recipes": {
       "Core:axe": {
         "inputs": {

@@ -1,0 +1,6 @@
+{
+  "basedOn":"Core:dirt",
+  "entity":{
+    "prefab":"BasicCrafting:testWorkstation"
+  }
+}
