@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.crafting.listCrafting.UI;
+package org.terasology.crafting.listCrafting.inHand;
 
 import org.lwjgl.input.Keyboard;
 import org.terasology.input.BindButtonEvent;

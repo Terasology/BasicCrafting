@@ -49,10 +49,10 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
     public Recipe[] getRecipes(String category) {
         category = category.toLowerCase();
         if (categoryLookup.containsKey(category)) {
-            List<Integer> indicies = categoryLookup.get(category);
-            Recipe[] recipes = new Recipe[indicies.size()];
+            List<Integer> indices = categoryLookup.get(category);
+            Recipe[] recipes = new Recipe[indices.size()];
             int i = 0;
-            for (int index : indicies) {
+            for (int index : indices) {
                 recipes[i] = recipeList.get(index);
                 i++;
             }

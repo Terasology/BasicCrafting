@@ -17,6 +17,7 @@ package org.terasology.crafting.listCrafting.UI;
 
 
 import org.terasology.crafting.listCrafting.components.CraftingWorkstationComponent;
+import org.terasology.crafting.listCrafting.inHand.InHandCraftingButton;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -49,9 +50,9 @@ public class ListUISystem extends BaseComponentSystem {
     public void inHandCraftRequested(InHandCraftingButton event, EntityRef entity,
                                      ClientComponent clientComponent) {
         if (event.getState() == ButtonState.DOWN) {
-            nuiManager.toggleScreen("Crafting:BaseListCraftingScreen");
-            if (nuiManager.isOpen("Crafting:BaseListCraftingScreen")) {
-                BaseListCraftingScreen screen = (BaseListCraftingScreen) nuiManager.getScreen("Crafting:BaseListCraftingScreen");
+            nuiManager.toggleScreen("BasicCrafting:BaseListCraftingScreen");
+            if (nuiManager.isOpen("BasicCrafting:BaseListCraftingScreen")) {
+                BaseListCraftingScreen screen = (BaseListCraftingScreen) nuiManager.getScreen("BasicCrafting:BaseListCraftingScreen");
                 screen.setWorkstationID("InHand");
             }
         }
@@ -68,10 +69,10 @@ public class ListUISystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
     public void workstationCraftRequested(ActivateEvent event, EntityRef entity, CraftingWorkstationComponent component) {
         if (!event.isConsumed()) {
-            nuiManager.toggleScreen("Crafting:BaseListCraftingScreen");
-            if (nuiManager.isOpen("Crafting:BaseListCraftingScreen")) {
-                BaseListCraftingScreen screen = (BaseListCraftingScreen) nuiManager.getScreen("Crafting:BaseListCraftingScreen");
-                screen.setWorkstationID(component.id);
+            nuiManager.toggleScreen("BasicCrafting:BaseListCraftingScreen");
+            if (nuiManager.isOpen("BasicCrafting:BaseListCraftingScreen")) {
+                BaseListCraftingScreen screen = (BaseListCraftingScreen) nuiManager.getScreen("BasicCrafting:BaseListCraftingScreen");
+                screen.setWorkstationID(component.recipeCategory);
             }
             event.consume();
         }

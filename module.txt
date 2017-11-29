@@ -1,9 +1,9 @@
 {
-    "id" : "Crafting",
+    "id" : "BasicCrafting",
     "version" : "0.1.0-SNAPSHOT",
-    "author" : "",
-    "displayName" : "Crafting",
-    "description" : "",
+    "author" : "jellysnake",
+    "displayName" : "BasicCrafting",
+    "description" : "Provides a framework for crafting and a simple crafting method",
     "dependencies" : [
          {
              "id" : "Core",
