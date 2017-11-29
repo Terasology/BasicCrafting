@@ -14,6 +14,139 @@
           "Core:torch": 2
         },
         "outputCount": 2
+      },
+      "Core:chest": {
+        "inputs": {
+          "tool": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:coal": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:crossbow": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:door": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:explodeTool": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:FuseLong": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:FuseShort": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:pickaxe2": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:railgunTool": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:shovel": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:tnt": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:water": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:torch": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:dirt": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:Ice": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:Ladder": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:GoldOre": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:DeadBush": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
+      },
+      "Core:Stone": {
+        "inputs": {
+          "Core:shovel": 1,
+          "Core:torch": 2
+        },
+        "outputCount": 2
       }
     }
   }
