@@ -148,7 +148,9 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
                         /* Add link between the ingredient name and icon */
                         if (entity.hasComponent(CraftingIngredientComponent.class)) {
                             CraftingIngredientComponent ingredient = entity.getComponent(CraftingIngredientComponent.class);
-                            addIconPair(ingredient.id.toLowerCase(), icon);
+                            for (String id : ingredient.ingredientIds) {
+                                addIconPair(id.toLowerCase(), icon);
+                            }
                         }
                         /* Add link between prefab name and icon */
                         addIconPair(prefab.getName().toLowerCase(), icon);

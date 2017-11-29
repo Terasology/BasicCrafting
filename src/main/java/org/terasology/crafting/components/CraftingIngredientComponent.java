@@ -17,10 +17,13 @@ package org.terasology.crafting.components;
 
 import org.terasology.entitySystem.Component;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Provides another name that an be used to specify this item in a recipe
  * This name can be used for multiple different items.
  */
 public class CraftingIngredientComponent implements Component {
-    public String id = "";
+    public List<String> ingredientIds = new LinkedList<>();
 }

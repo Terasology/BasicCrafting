@@ -29,6 +29,7 @@ import org.terasology.rendering.nui.CoreWidget;
 import org.terasology.rendering.nui.events.NUIMouseClickEvent;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
+import org.terasology.utilities.Assets;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,17 +48,18 @@ public class UIRecipeList extends CoreWidget {
     private ListRecipe[] recipes = new ListRecipe[0];
     private ItemIcon[] icons = new ItemIcon[0];
     private int selectedRecipe = -1;
+    private TextureRegion selectedTexture = Assets.getTexture("BasicCrafting:selectedIcon").get();
 
     private ActivateEventListener listener;
 
     @Override
-    public void onDraw(Canvas canvas) {
+     public void onDraw(Canvas canvas) {
         if (recipes != null && icons != null) {
             int i = 0;
             for (int y = 0; i < recipes.length; y++) {
                 for (int x = 0; x < 5 && i < recipes.length; x++) {
                     if (i == selectedRecipe) {
-                        canvas.drawBackground(Rect2i.createFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                        canvas.drawTexture(selectedTexture, Rect2i.createFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     }
                     canvas.drawWidget(icons[i], Rect2i.createFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     i++;
@@ -96,7 +98,7 @@ public class UIRecipeList extends CoreWidget {
 
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
-        return new Vector2i(ICON_SIZE * 5, (int) (Math.ceil(recipes.length / 5) * ICON_SIZE));
+        return new Vector2i(ICON_SIZE * 5, (int) (Math.ceil(recipes.length / 5.0) * ICON_SIZE));
     }
 
     /**

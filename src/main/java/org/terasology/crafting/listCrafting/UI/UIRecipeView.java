@@ -15,6 +15,7 @@
  */
 package org.terasology.crafting.listCrafting.UI;
 
+import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.math.geom.Rect2i;
@@ -36,9 +37,10 @@ public class UIRecipeView extends CoreWidget {
     private IconManager iconManager;
     private FastRandom random = new FastRandom();
 
-    private TextureRegion addTexture = Assets.getTextureRegion("Crafting:AddIcon").get();
-    private TextureRegion equalsTexture = Assets.getTextureRegion("Crafting:EqualsIcon").get();
+    private TextureRegion addTexture = Assets.getTextureRegion("BasicCrafting:AddIcon").get();
+    private TextureRegion equalsTexture = Assets.getTextureRegion("BasicCrafting:EqualsIcon").get();
 
+    private ListRecipe recipe;
     private ItemIcon[] inputIcons = null;
     private ItemIcon result = new ItemIcon();
 
@@ -87,6 +89,7 @@ public class UIRecipeView extends CoreWidget {
             /* Causes the widget to not draw anything */
             inputIcons = null;
         }
+        recipe = newRecipe;
     }
 
     /**
@@ -101,6 +104,15 @@ public class UIRecipeView extends CoreWidget {
         }
         increment(newRecipe.output, result);
         result.setQuantity(newRecipe.outputCount);
+    }
+
+    public void stepItemIcons() {
+        if (recipe != null) {
+            for (int i = 0; i < inputIcons.length; i++) {
+                increment(recipe.inputItems[i], inputIcons[i]);
+            }
+            increment(recipe.output, result);
+        }
     }
 
     /**

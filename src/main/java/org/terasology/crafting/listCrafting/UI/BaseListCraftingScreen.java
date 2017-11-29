@@ -18,6 +18,7 @@ package org.terasology.crafting.listCrafting.UI;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
+import org.terasology.engine.Time;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -32,13 +33,19 @@ public class BaseListCraftingScreen extends CoreScreenLayer {
     private RecipeStore recipeStore;
     @In
     private LocalPlayer localPlayer;
+    private UIWorkstationView workstationView;
 
     @Override
     public void initialise() {
-        UIWorkstationView recipeList = find("workstationView", UIWorkstationView.class);
-        if (recipeList != null) {
-            recipeList.initialise(craftingManager, recipeStore, iconManager);
+        workstationView = find("workstationView", UIWorkstationView.class);
+        if (workstationView != null) {
+            workstationView.initialise(craftingManager, recipeStore, iconManager);
         }
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
     }
 
     /**
@@ -47,9 +54,8 @@ public class BaseListCraftingScreen extends CoreScreenLayer {
      * @param newID The id to set it to
      */
     public void setWorkstationID(String newID) {
-        UIWorkstationView recipeList = find("workstationView", UIWorkstationView.class);
-        if (recipeList != null) {
-            recipeList.setupView(localPlayer.getCharacterEntity(), newID);
+        if (workstationView != null) {
+            workstationView.setupView(localPlayer.getCharacterEntity(), newID);
         }
     }
 

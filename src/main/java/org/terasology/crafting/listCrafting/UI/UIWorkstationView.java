@@ -24,12 +24,18 @@ import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreWidget;
+import org.terasology.rendering.nui.layouts.ScrollableArea;
 import org.terasology.rendering.nui.widgets.UIButton;
+
+import javax.swing.*;
 
 public class UIWorkstationView extends CoreWidget {
 
     private static final int ICON_SIZE = 64;
+    private static final float UPDATE_ICON_STEP = 1.2f;
+    private float counter;
 
+    private ScrollableArea scrollableArea = new ScrollableArea();
     private UIRecipeView recipeView = new UIRecipeView();
     private UIRecipeList recipeList = new UIRecipeList();
     private UIButton craftButton = new UIButton();
@@ -39,7 +45,7 @@ public class UIWorkstationView extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         int xOffset = (canvas.size().x - 5 * ICON_SIZE) / 2;
-        canvas.drawWidget(recipeList, Rect2i.createFromMinAndSize(xOffset, 0, 5 * ICON_SIZE, 3 * ICON_SIZE));
+        canvas.drawWidget(scrollableArea, Rect2i.createFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28, 3 * ICON_SIZE));
         canvas.drawWidget(recipeView, Rect2i.createFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4, canvas.size().x, ICON_SIZE));
         canvas.drawWidget(craftButton, Rect2i.createFromMinAndSize(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
     }
@@ -64,6 +70,21 @@ public class UIWorkstationView extends CoreWidget {
             }
         });
         craftButton.setText("Craft");
+
+        scrollableArea.setContent(recipeList);
+        scrollableArea.setPreferredSize(5 * ICON_SIZE, 3 * ICON_SIZE);
+
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        if (counter >= UPDATE_ICON_STEP) {
+            recipeView.stepItemIcons();
+            counter = 0f;
+        } else {
+            counter += delta;
+        }
     }
 
     public void setupView(EntityRef newCraftingEntity, String newWorkstationID) {

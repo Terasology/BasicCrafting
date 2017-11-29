@@ -17,6 +17,7 @@ package org.terasology.crafting.listCrafting.systems;
 
 import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
+import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -34,6 +35,8 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
 
     @In
     private InventoryManager inventoryManager;
+    @In
+    private RecipeStore recipeStore;
     @In
     private EntityManager entityManager;
 
@@ -85,22 +88,36 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
         for (int i = 0; i < slotCount; i++) {
             EntityRef slotItem = InventoryUtils.getItemAt(entity, i);
             int stackSize = InventoryUtils.getStackCount(slotItem);
-            if (stackSize < count) {
-                continue;
-            }
-            if (item.equalsIgnoreCase(slotItem.getParentPrefab().getName())) {
+            if (stackSize >= count && isCraftingIngredient(slotItem, item)) {
                 return i;
-            } else if (slotItem.hasComponent(CraftingIngredientComponent.class)) {
-                if (item.equalsIgnoreCase(slotItem.getComponent(CraftingIngredientComponent.class).id)) {
-                    return i;
-                }
-            } else if (slotItem.hasComponent(BlockItemComponent.class)) {
-                if (item.equalsIgnoreCase(slotItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
-                    return i;
-                }
             }
         }
         return -1;
+    }
+
+
+    /**
+     * Checks if the item is the same one being looked for.
+     * @param item The item to check
+     * @param expectedItem The item being looked for
+     * @return True if item is expectedItem, false otherwise
+     */
+    private boolean isCraftingIngredient(EntityRef item, String expectedItem) {
+        if (expectedItem.equalsIgnoreCase(item.getParentPrefab().getName())) {
+            return true;
+        } else if (item.hasComponent(CraftingIngredientComponent.class)) {
+            CraftingIngredientComponent component = item.getComponent(CraftingIngredientComponent.class);
+            for (String id : component.ingredientIds) {
+                if (expectedItem.equalsIgnoreCase(id)) {
+                    return true;
+                }
+            }
+        } else if (item.hasComponent(BlockItemComponent.class)) {
+            if (expectedItem.equalsIgnoreCase(item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
