@@ -1,0 +1,23 @@
+{
+  "ListRecipes": {
+    "category": "ChangeToInHandToTestMe",
+    "recipes": {
+      /* Test block output & block input */
+      "Core:Dirt": {
+        "inputs": {
+          "Sand": 4,
+          "Snow": 2
+        },
+        "outputCount": 2
+      },
+      /* Test item output & item input */
+      "Core:Axe": {
+        "inputs": {
+          "Shovel": 1,
+          "Pickaxe": 1
+        },
+        "outputCount": 1
+      }
+    }
+  }
+}

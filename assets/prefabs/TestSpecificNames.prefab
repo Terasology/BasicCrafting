@@ -1,0 +1,23 @@
+{
+  "ListRecipes": {
+    "category": "InHand",
+    "recipes": {
+      /* Test block output & block input */
+      "Core:Dirt": {
+        "inputs": {
+          "Core:Snow": 4,
+          "Core:Sand": 2
+        },
+        "outputCount": 2
+      },
+      /* Test item output & item input */
+      "Core:Axe": {
+        "inputs": {
+          "Core:Pickaxe": 1,
+          "Core:Shovel": 1
+        },
+        "outputCount": 1
+      }
+    }
+  }
+}
