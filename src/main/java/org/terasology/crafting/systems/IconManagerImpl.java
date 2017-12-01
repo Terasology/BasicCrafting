@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.crafting.systems;
 
 import com.google.common.collect.Iterables;
@@ -75,10 +76,10 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @param key The key to use
      * @return All the Meshes found or null if the key doesn't exist.
      */
-    public Set<Mesh> getMesh(String key) {
+    public Mesh[] getMesh(String key) {
         key = key.toLowerCase();
         if (meshMap.containsKey(key)) {
-            return meshMap.get(key);
+            return meshMap.get(key).toArray(new Mesh[0]);
         } else {
             return null;
         }
@@ -90,10 +91,10 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @param key The key to use
      * @return All Icons found or null if the key doesn't exist.
      */
-    public Set<TextureRegion> getIcon(String key) {
+    public TextureRegion[] getIcon(String key) {
         key = key.toLowerCase();
         if (iconMap.containsKey(key)) {
-            return iconMap.get(key);
+            return iconMap.get(key).toArray(new TextureRegion[0]);
         } else {
             return null;
         }
@@ -152,8 +153,10 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
                                 addIconPair(id.toLowerCase(), icon);
                             }
                         }
-                        /* Add link between prefab name and icon */
+                        /* Add link between full prefab name and icon */
                         addIconPair(prefab.getName().toLowerCase(), icon);
+                        /* Add link between short prefab name and icon */
+                        addIconPair(prefab.getUrn().getResourceName().toLowerCase(), icon);
                     }
                 } catch (Exception ex) {
                     /* Ignore all exceptions, it will prevent bad entities from breaking everything. */
@@ -186,7 +189,14 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
                 /* Option B */
                 //blockManager.getBlock(block).getMeshGenerator().getStandaloneMesh();
 
+                /* Add the full block name */
                 addMeshPair(blockFamily.getURI().toString().toLowerCase(), mesh);
+                /* Add the short block name */
+                addMeshPair(block.getBlockFamilyDefinitionUrn().getResourceName().toLowerCase(), mesh);
+                /* Add all the block categories */
+                for (String category : blockFamily.getCategories()) {
+                    addMeshPair(category, mesh);
+                }
             }
         }
 
@@ -219,7 +229,7 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      */
     private void addMeshPair(String key, Mesh value) {
         Set<Mesh> meshList;
-        if (iconMap.containsKey(key)) {
+        if (meshMap.containsKey(key)) {
             meshList = meshMap.get(key);
         } else {
             meshList = new HashSet<>();

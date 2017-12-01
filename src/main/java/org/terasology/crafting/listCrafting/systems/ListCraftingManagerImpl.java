@@ -17,6 +17,7 @@ package org.terasology.crafting.listCrafting.systems;
 
 import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
+import org.terasology.crafting.systems.BaseCraftingManager;
 import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -27,11 +28,14 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.family.BlockFamily;
 import org.terasology.world.block.items.BlockItemComponent;
+import org.terasology.world.block.items.BlockItemFactory;
 
 @Share(ListCraftingManager.class)
 @RegisterSystem
-public class ListCraftingManagerImpl extends BaseComponentSystem implements ListCraftingManager {
+public class ListCraftingManagerImpl extends BaseCraftingManager implements ListCraftingManager {
 
     @In
     private InventoryManager inventoryManager;
@@ -39,6 +43,9 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
     private RecipeStore recipeStore;
     @In
     private EntityManager entityManager;
+    @In
+    private BlockManager blockManager;
+    private BlockItemFactory blockItemFactory;
 
     /**
      * Attempts to craft the given recipe
@@ -61,13 +68,13 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
             }
             if (giveToCrafter) {
                 for (int i = 0; i < recipe.outputCount; i++) {
-                    inventoryManager.giveItem(craftingEntity, craftingEntity, entityManager.create(recipe.output));
+                    inventoryManager.giveItem(craftingEntity, craftingEntity, createResultFromName(recipe.output));
                 }
                 return new EntityRef[0];
             } else {
                 EntityRef[] crafted = new EntityRef[recipe.outputCount];
                 for (int i = 0; i < recipe.outputCount; i++) {
-                    crafted[i] = entityManager.create(recipe.output);
+                    crafted[i] = createResultFromName(recipe.output);
                 }
                 return crafted;
             }
@@ -76,70 +83,23 @@ public class ListCraftingManagerImpl extends BaseComponentSystem implements List
     }
 
     /**
-     * Locates the position of a given String item name in an inventory.
-     * Attempts to match the string against either the prefab name, block name or the CraftingIngredientComponent (if one exists)
+     * Detects if the result of a recipe is a Block or an Item and creates the correct entity.
      *
-     * @param entity The entity to look in for the item
-     * @param item   The name of the item being looked for
-     * @return The slot containing the item or -1 if it was not found
+     * @param name The name of the result
+     * @return The new entity or an air block if creation was not successful.
      */
-    private int findInInventory(EntityRef entity, String item, int count) {
-        int slotCount = InventoryUtils.getSlotCount(entity);
-        for (int i = 0; i < slotCount; i++) {
-            EntityRef slotItem = InventoryUtils.getItemAt(entity, i);
-            int stackSize = InventoryUtils.getStackCount(slotItem);
-            if (stackSize >= count && isCraftingIngredient(slotItem, item)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
-    /**
-     * Checks if the item is the same one being looked for.
-     * @param item The item to check
-     * @param expectedItem The item being looked for
-     * @return True if item is expectedItem, false otherwise
-     */
-    private boolean isCraftingIngredient(EntityRef item, String expectedItem) {
-        if (expectedItem.equalsIgnoreCase(item.getParentPrefab().getName())) {
-            return true;
-        } else if (item.hasComponent(CraftingIngredientComponent.class)) {
-            CraftingIngredientComponent component = item.getComponent(CraftingIngredientComponent.class);
-            for (String id : component.ingredientIds) {
-                if (expectedItem.equalsIgnoreCase(id)) {
-                    return true;
+    private EntityRef createResultFromName(String name) {
+        if (entityManager.getPrefabManager().exists(name)) {
+            return entityManager.create(name);
+        } else {
+            BlockFamily block = blockManager.getBlockFamily(name);
+            if (block != null) {
+                if (blockItemFactory == null) {
+                    blockItemFactory = new BlockItemFactory(entityManager);
                 }
-            }
-        } else if (item.hasComponent(BlockItemComponent.class)) {
-            if (expectedItem.equalsIgnoreCase(item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
-                return true;
+                return blockItemFactory.newInstance(block);
             }
         }
-        return false;
-    }
-
-    /**
-     * Gets all the slots the items could be in.
-     *
-     * @param entity The entity to look in
-     * @param recipe The recipe to be looking for
-     * @return The list of slots the inputs are in. If all inputs could not be found, null is returned
-     */
-    private int[] getSlots(EntityRef entity, ListRecipe recipe) {
-        if (!entity.hasComponent(InventoryComponent.class)) {
-            return null;
-        }
-        int[] slots = new int[recipe.inputItems.length];
-        for (int i = 0; i < recipe.inputItems.length; i++) {
-            int slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i]);
-            if (slot != -1) {
-                slots[i] = slot;
-            } else {
-                return null;
-            }
-        }
-        return slots;
+        return EntityRef.NULL;
     }
 }

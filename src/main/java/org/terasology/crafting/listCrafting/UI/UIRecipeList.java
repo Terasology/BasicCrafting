@@ -180,7 +180,7 @@ public class UIRecipeList extends CoreWidget {
      * @param icon   The ItemIcon to set the mesh on
      */
     private void chooseMesh(String iconID, ItemIcon icon) {
-        Object[] meshes = iconManager.getMesh(iconID).toArray();
+        Object[] meshes = iconManager.getMesh(iconID);
         switch (meshes.length) {
             case 0:
                 return;
@@ -199,7 +199,7 @@ public class UIRecipeList extends CoreWidget {
      * @param icon   The ItemIcon to set it on
      */
     private void chooseIcon(String iconID, ItemIcon icon) {
-        Object[] foundIcons = iconManager.getIcon(iconID).toArray();
+        Object[] foundIcons = iconManager.getIcon(iconID);
         switch (icons.length) {
             case 0:
                 return;

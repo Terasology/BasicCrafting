@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.crafting.listCrafting.UI;
 
-import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.math.geom.Rect2i;
@@ -143,7 +143,7 @@ public class UIRecipeView extends CoreWidget {
      * @param icon   The ItemIcon to set the mesh on
      */
     private void chooseMesh(String iconID, ItemIcon icon) {
-        Object[] meshes = iconManager.getMesh(iconID).toArray();
+        Object[] meshes = iconManager.getMesh(iconID);
         switch (meshes.length) {
             case 0:
                 return;
@@ -164,7 +164,7 @@ public class UIRecipeView extends CoreWidget {
      * @param icon   The ItemIcon to set it on
      */
     private void chooseIcon(String iconID, ItemIcon icon) {
-        TextureRegion[] icons = iconManager.getIcon(iconID).toArray(new TextureRegion[0]);
+        TextureRegion[] icons = iconManager.getIcon(iconID);
         switch (icons.length) {
             case 0:
                 return;

@@ -29,7 +29,7 @@ public interface IconManager {
      * @param key The key to use
      * @return All the Meshes found or null if the key doesn't exist.
      */
-    Set<Mesh> getMesh(String key);
+    Mesh[] getMesh(String key);
 
     /**
      * Get all icons associated with a key
@@ -37,7 +37,7 @@ public interface IconManager {
      * @param key The key to use
      * @return All Icons found or null if the key doesn't exist.
      */
-    Set<TextureRegion> getIcon(String key);
+    TextureRegion[] getIcon(String key);
 
     /**
      * Check if there are any icons associated with the key
