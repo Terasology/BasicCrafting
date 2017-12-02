@@ -23,33 +23,55 @@ import org.terasology.registry.Share;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Share(RecipeStore.class)
 @RegisterSystem
 public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore {
 
     private List<Recipe> recipeList = new ArrayList<>();
-    private Map<String, List<Integer>> categoryLookup = new HashMap<>();
+    private Map<String, Set<Integer>> categoryLookup = new HashMap<>();
 
-    public Recipe getRecipe(int recipeID) {
-        if (recipeID > -1 && recipeID < recipeList.size()) {
-            return recipeList.get(recipeID);
-        }
-        return null;
-    }
-
-    @Override
     public boolean hasCategory(String category) {
         return categoryLookup.containsKey(category.toLowerCase());
     }
 
+    /**
+     * Get a list of all recipes in the given category
+     *
+     * @param category The category to look for
+     * @return All recipes in the category
+     */
     public Recipe[] getRecipes(String category) {
         category = category.toLowerCase();
         if (categoryLookup.containsKey(category)) {
-            List<Integer> indices = categoryLookup.get(category);
+            return getRecipesFromIndices(categoryLookup.get(category));
+        } else {
+            return null;
+        }
+    }
+
+    public Recipe[] getRecipes(String[] categories) {
+        Set<Integer> indices = new HashSet<>();
+        for (String category : categories) {
+            category = category.toLowerCase();
+            if (categoryLookup.containsKey(category)) {
+                indices.addAll(categoryLookup.get(category));
+            }
+        }
+        return getRecipesFromIndices(indices);
+    }
+
+    /**
+     *
+     * @param indices The indices to use
+     * @return
+     */
+    private Recipe[] getRecipesFromIndices(Set<Integer> indices) {
+        if (indices.size() > 0) {
             Recipe[] recipes = new Recipe[indices.size()];
             int i = 0;
             for (int index : indices) {
@@ -62,19 +84,41 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         }
     }
 
-    public int putRecipe(Recipe recipe, String category) {
-        int index = recipeList.size();
-        recipeList.add(recipe);
-        category = category.toLowerCase();
-        List<Integer> idList;
-        if (categoryLookup.containsKey(category)) {
-            idList = categoryLookup.get(category);
-        } else {
-            idList = new LinkedList<>();
+    /**
+     * Adds a recipe to the store under set categories.
+     *
+     * @param recipe     The recipe to add
+     * @param categories The categories to add the recipe under
+     */
+
+    public void putRecipe(Recipe recipe, String[] categories) {
+        int index = addRecipeToStore(recipe);
+        for (String category : categories) {
+            addLinkToRecipe(index, category.toLowerCase());
         }
-        idList.add(index);
+    }
+
+    /**
+     * Adds a recipe to the list
+     *
+     * @param recipe The recipe to add
+     * @return The index of the recipe
+     */
+    private int addRecipeToStore(Recipe recipe) {
+        recipeList.add(recipe);
+        return recipeList.size() - 1;
+    }
+
+    /**
+     * Adds a link between a recipe ID and a category
+     *
+     * @param id       The recipe's ID
+     * @param category The category to add the recipe to
+     */
+    private void addLinkToRecipe(int id, String category) {
+        Set<Integer> idList = categoryLookup.containsKey(category) ? categoryLookup.get(category) : new HashSet<>();
+        idList.add(id);
         categoryLookup.put(category, idList);
-        return index;
     }
 
 }

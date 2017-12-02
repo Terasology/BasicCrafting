@@ -62,7 +62,7 @@ public class LoadRecipeSystem extends BaseComponentSystem {
     private void loadRecipeComponent(Component genericComponent) {
         RecipeComponent component = (RecipeComponent) genericComponent;
         for (Recipe recipe : component.getRecipes()) {
-            recipeStore.putRecipe(recipe, component.getCategory());
+            recipeStore.putRecipe(recipe, component.getCategories());
         }
     }
 }

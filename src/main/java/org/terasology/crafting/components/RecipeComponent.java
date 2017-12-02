@@ -29,5 +29,5 @@ public interface RecipeComponent {
      * Get the category to place these recipes into
      * @return The category id
      */
-    String getCategory();
+    String[] getCategories();
 }

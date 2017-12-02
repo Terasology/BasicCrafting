@@ -20,6 +20,8 @@ import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.components.RecipeComponent;
 import org.terasology.entitySystem.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -28,7 +30,7 @@ import java.util.TreeMap;
  */
 public class ListRecipesComponent implements Component, RecipeComponent {
 
-    public String category = "InHand";
+    public List<String> categories = Collections.singletonList("InHand");
     public Map<String, ListRecipeContainer> recipes = new TreeMap<>();
 
     public Recipe[] getRecipes() {
@@ -42,7 +44,7 @@ public class ListRecipesComponent implements Component, RecipeComponent {
         return builtRecipes;
     }
 
-    public String getCategory() {
-        return category;
+    public String[] getCategories() {
+        return categories.toArray(new String[0]);
     }
 }
