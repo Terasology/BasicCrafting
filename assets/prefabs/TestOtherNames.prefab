@@ -1,8 +1,7 @@
 {
   "ListRecipes": {
-    "category": "ChangeToInHandToTestMe",
+    "categories": ["InHand"],
     "recipes": {
-      /* Test block output & block input */
       "Core:Dirt": {
         "inputs": {
           "Soil": 4,
