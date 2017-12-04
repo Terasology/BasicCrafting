@@ -24,6 +24,7 @@ import org.terasology.registry.Share;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,15 +47,38 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
      * @return All recipes in the category
      */
     public Recipe[] getRecipes(String category) {
-        category = category.toLowerCase();
-        if (categoryLookup.containsKey(category)) {
-            return getRecipesFromIndices(categoryLookup.get(category));
+        return getRecipes(new String[]{category});
+    }
+
+    public Recipe[] getRecipes(String[] categories) {
+        return getRecipesFromIndices(getIndicesInCategories(categories));
+    }
+
+    public <T extends Recipe> T[] getRecipes(String category, Class<T> filterClass) {
+        return getRecipes(new String[]{category}, filterClass);
+    }
+
+    public <T extends Recipe> T[] getRecipes(String[] categories, Class<T> filterClass) {
+        Set<Integer> indices = getIndicesInCategories(categories);
+        return getRecipesFromIndices(indices, filterClass);
+    }
+
+    private <T extends Recipe> T[] getRecipesFromIndices(Set<Integer> indices, Class<T> filterClass) {
+        if (indices.size() > 0) {
+            List<T> recipes = new LinkedList<>();
+            for (int index : indices) {
+                Recipe recipe = recipeList.get(index);
+                if (recipe.getClass().equals(filterClass)) {
+                    recipes.add(filterClass.cast(recipeList.get(index)));
+                }
+            }
+            return (T[]) recipes.toArray();
         } else {
             return null;
         }
     }
 
-    public Recipe[] getRecipes(String[] categories) {
+    private Set<Integer> getIndicesInCategories(String[] categories) {
         Set<Integer> indices = new HashSet<>();
         for (String category : categories) {
             category = category.toLowerCase();
@@ -62,13 +86,13 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
                 indices.addAll(categoryLookup.get(category));
             }
         }
-        return getRecipesFromIndices(indices);
+        return indices;
     }
 
+
     /**
-     *
      * @param indices The indices to use
-     * @return
+     * @return The recipes located at the indices.
      */
     private Recipe[] getRecipesFromIndices(Set<Integer> indices) {
         if (indices.size() > 0) {

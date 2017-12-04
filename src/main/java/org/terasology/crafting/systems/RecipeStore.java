@@ -31,6 +31,12 @@ public interface RecipeStore {
      */
     Recipe[] getRecipes(String category);
 
+    Recipe[] getRecipes(String[] categories);
+
+    <T extends Recipe> T[] getRecipes(String[] categories, Class<T> filterClass);
+
+    <T extends Recipe> T[] getRecipes(String category, Class<T> filterClass);
+
     /**
      * Adds a recipe to the store.
      *
