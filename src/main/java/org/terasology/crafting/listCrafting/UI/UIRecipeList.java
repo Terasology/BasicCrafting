@@ -29,8 +29,10 @@ import org.terasology.rendering.nui.CoreWidget;
 import org.terasology.rendering.nui.events.NUIMouseClickEvent;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
+import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.utilities.Assets;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,7 +95,7 @@ public class UIRecipeList extends CoreWidget {
         if (listener != null) {
             listener.onActivated(this);
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -147,7 +149,7 @@ public class UIRecipeList extends CoreWidget {
      */
     private void collectRecipes() {
         if (recipeStore.hasCategory(workstationID)) {
-            recipes = recipeStore.getRecipes(workstationID, ListRecipe.class);
+            recipes = recipeStore.getRecipes(workstationID, ListRecipe.class).toArray(new ListRecipe[0]);
             setIcons();
         }
 
@@ -166,7 +168,8 @@ public class UIRecipeList extends CoreWidget {
             } else if (iconManager.hasMesh(recipes[i].output)) {
                 chooseMesh(recipes[i].output, icons[i]);
             }
-            icons[i].setTooltip(recipes[i].output);
+
+            icons[i].setTooltipLines(Collections.singletonList(new TooltipLine(recipes[i].output)));
         }
     }
 

@@ -18,6 +18,8 @@ package org.terasology.crafting.systems;
 
 import org.terasology.crafting.components.Recipe;
 
+import java.util.List;
+
 /**
  * Provides a centralised store for all recipes.
  */
@@ -33,9 +35,9 @@ public interface RecipeStore {
 
     Recipe[] getRecipes(String[] categories);
 
-    <T extends Recipe> T[] getRecipes(String[] categories, Class<T> filterClass);
+    <T extends Recipe> List<T> getRecipes(String[] categories, Class<T> filterClass);
 
-    <T extends Recipe> T[] getRecipes(String category, Class<T> filterClass);
+    <T extends Recipe> List<T> getRecipes(String category, Class<T> filterClass);
 
     /**
      * Adds a recipe to the store.

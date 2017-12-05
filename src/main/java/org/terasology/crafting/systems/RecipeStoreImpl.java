@@ -17,11 +17,14 @@ package org.terasology.crafting.systems;
 
 
 import org.terasology.crafting.components.Recipe;
+import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.registry.Share;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -54,16 +57,16 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         return getRecipesFromIndices(getIndicesInCategories(categories));
     }
 
-    public <T extends Recipe> T[] getRecipes(String category, Class<T> filterClass) {
+    public <T extends Recipe> List<T> getRecipes(String category, Class<T> filterClass) {
         return getRecipes(new String[]{category}, filterClass);
     }
 
-    public <T extends Recipe> T[] getRecipes(String[] categories, Class<T> filterClass) {
+    public <T extends Recipe> List<T> getRecipes(String[] categories, Class<T> filterClass) {
         Set<Integer> indices = getIndicesInCategories(categories);
         return getRecipesFromIndices(indices, filterClass);
     }
 
-    private <T extends Recipe> T[] getRecipesFromIndices(Set<Integer> indices, Class<T> filterClass) {
+    private <T extends Recipe> List<T> getRecipesFromIndices(Set<Integer> indices, Class<T> filterClass) {
         if (indices.size() > 0) {
             List<T> recipes = new LinkedList<>();
             for (int index : indices) {
@@ -72,7 +75,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
                     recipes.add(filterClass.cast(recipeList.get(index)));
                 }
             }
-            return (T[]) recipes.toArray();
+            return recipes;
         } else {
             return null;
         }
