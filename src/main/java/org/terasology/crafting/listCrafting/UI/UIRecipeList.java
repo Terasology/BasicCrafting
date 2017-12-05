@@ -53,7 +53,7 @@ public class UIRecipeList extends CoreWidget {
     private ActivateEventListener listener;
 
     @Override
-     public void onDraw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         if (recipes != null && icons != null) {
             int i = 0;
             for (int y = 0; i < recipes.length; y++) {
@@ -116,7 +116,7 @@ public class UIRecipeList extends CoreWidget {
     /**
      * Sets the icon manager.
      *
-     * @param newIconManager     The new icon manager
+     * @param newIconManager The new icon manager
      */
     public void setManagers(RecipeStore newRecipeStore, IconManager newIconManager) {
         recipeStore = newRecipeStore;
@@ -132,6 +132,10 @@ public class UIRecipeList extends CoreWidget {
     public void setWorkstationID(String newID) {
         workstationID = newID;
         collectRecipes();
+        selectedRecipe = -1;
+        if (listener != null) {
+            listener.onActivated(this);
+        }
     }
 
     public void subscribeRecipeView(ActivateEventListener newListener) {
@@ -143,14 +147,7 @@ public class UIRecipeList extends CoreWidget {
      */
     private void collectRecipes() {
         if (recipeStore.hasCategory(workstationID)) {
-            Recipe[] storedRecipes = recipeStore.getRecipes(workstationID);
-            List<ListRecipe> listRecipes = new LinkedList<>();
-            for (Recipe recipe : storedRecipes) {
-                if (recipe.getClass() == ListRecipe.class) {
-                    listRecipes.add((ListRecipe) recipe);
-                }
-            }
-            recipes = listRecipes.toArray(new ListRecipe[0]);
+            recipes = recipeStore.getRecipes(workstationID, ListRecipe.class);
             setIcons();
         }
 
