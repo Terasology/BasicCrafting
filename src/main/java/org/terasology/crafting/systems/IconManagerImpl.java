@@ -20,7 +20,6 @@ import com.google.common.collect.Iterables;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -36,18 +35,21 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockUri;
 import org.terasology.world.block.family.BlockFamily;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @Share(IconManager.class)
 @RegisterSystem
 public class IconManagerImpl extends BaseComponentSystem implements IconManager {
 
-    private Map<String, Set<TextureRegion>> iconMap = new HashMap<>();
-    private Map<String, Set<Mesh>> meshMap = new HashMap<>();
+    private List<TextureRegion> iconList = new ArrayList<>();
+    private List<Mesh> meshList = new ArrayList<>();
+    private Map<String, Set<Integer>> iconLookup = new HashMap<>();
+    private Map<String, Set<Integer>> meshLookup = new HashMap<>();
     private Texture texture;
 
     @In
@@ -78,8 +80,15 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      */
     public Mesh[] getMesh(String key) {
         key = key.toLowerCase();
-        if (meshMap.containsKey(key)) {
-            return meshMap.get(key).toArray(new Mesh[0]);
+        if (meshLookup.containsKey(key)) {
+            Set<Integer> indexSet = meshLookup.get(key);
+            Mesh[] meshes = new Mesh[indexSet.size()];
+            int i = 0;
+            for (Integer index : indexSet) {
+                meshes[i] = meshList.get(index);
+                i++;
+            }
+            return meshes;
         } else {
             return null;
         }
@@ -93,8 +102,15 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      */
     public TextureRegion[] getIcon(String key) {
         key = key.toLowerCase();
-        if (iconMap.containsKey(key)) {
-            return iconMap.get(key).toArray(new TextureRegion[0]);
+        if (iconLookup.containsKey(key)) {
+            Set<Integer> indexSet = iconLookup.get(key);
+            TextureRegion[] textures = new TextureRegion[indexSet.size()];
+            int i = 0;
+            for (Integer index : indexSet) {
+                textures[i] = iconList.get(index);
+                i++;
+            }
+            return textures;
         } else {
             return null;
         }
@@ -107,8 +123,7 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @return True if the key exists, false otherwise
      */
     public boolean hasIcon(String key) {
-        key = key.toLowerCase();
-        return iconMap.containsKey(key);
+        return iconLookup.containsKey(key.toLowerCase());
     }
 
     /**
@@ -118,8 +133,7 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @return True if the key exists, false otherwise
      */
     public boolean hasMesh(String key) {
-        key = key.toLowerCase();
-        return meshMap.containsKey(key);
+        return meshLookup.containsKey(key.toLowerCase());
     }
 
     /**
@@ -139,29 +153,26 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
     private void loadItems() {
         for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
             if (prefab.hasComponent(ItemComponent.class)) {
-                EntityRef entity = EntityRef.NULL;
                 try {
-                    entity = entityManager.create(prefab);
-                    if (entity.exists() && entity.hasComponent(ItemComponent.class)) {
-                        ItemComponent itemComponent = entity.getComponent(ItemComponent.class);
+                    if (prefab.exists() && prefab.hasComponent(ItemComponent.class)) {
+                        ItemComponent itemComponent = prefab.getComponent(ItemComponent.class);
                         TextureRegion icon = itemComponent.icon;
 
-                        /* Add link between the ingredient name and icon */
-                        if (entity.hasComponent(CraftingIngredientComponent.class)) {
-                            CraftingIngredientComponent ingredient = entity.getComponent(CraftingIngredientComponent.class);
+                        /* Add link between the ingredient names and icon */
+                        if (prefab.hasComponent(CraftingIngredientComponent.class)) {
+                            CraftingIngredientComponent ingredient = prefab.getComponent(CraftingIngredientComponent.class);
                             for (String id : ingredient.ingredientIds) {
                                 addIconPair(id.toLowerCase(), icon);
                             }
                         }
                         /* Add link between full prefab name and icon */
                         addIconPair(prefab.getName().toLowerCase(), icon);
+
                         /* Add link between short prefab name and icon */
                         addIconPair(prefab.getUrn().getResourceName().toLowerCase(), icon);
                     }
                 } catch (Exception ex) {
-                    /* Ignore all exceptions, it will prevent bad entities from breaking everything. */
-                } finally {
-                    entity.destroy();
+                    /* Ignore all exceptions, it will prevent bad prefabs from breaking everything. */
                 }
             }
         }
@@ -186,13 +197,12 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
                 BlockFamily blockFamily = blockManager.getBlockFamily(block.getFamilyUri());
                 Mesh mesh = blockFamily.getArchetypeBlock().getMeshGenerator().getStandaloneMesh();
 
-                /* Option B */
-                //blockManager.getBlock(block).getMeshGenerator().getStandaloneMesh();
-
                 /* Add the full block name */
                 addMeshPair(blockFamily.getURI().toString().toLowerCase(), mesh);
+
                 /* Add the short block name */
                 addMeshPair(block.getBlockFamilyDefinitionUrn().getResourceName().toLowerCase(), mesh);
+
                 /* Add all the block categories */
                 for (String category : blockFamily.getCategories()) {
                     addMeshPair(category, mesh);
@@ -200,8 +210,7 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
             }
         }
 
-        Optional<Texture> terrainTex = Assets.getTexture("engine:terrain");
-        texture = terrainTex.orElseGet(() -> Assets.getTexture("engine:default").get());
+        texture = Assets.getTexture("engine:terrain").orElseGet(() -> Assets.getTexture("engine:default").get());
     }
 
     /**
@@ -211,14 +220,17 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @param value The icon to use
      */
     private void addIconPair(String key, TextureRegion value) {
-        Set<TextureRegion> iconList;
-        if (iconMap.containsKey(key)) {
-            iconList = iconMap.get(key);
-        } else {
-            iconList = new HashSet<>();
+        /* Add item to list */
+        int index = iconList.indexOf(value);
+        if (index == -1) {
+            index = iconList.size();
+            iconList.add(value);
         }
-        iconList.add(value);
-        iconMap.put(key, iconList);
+
+        /* Add links to item */
+        Set<Integer> iconSet = iconLookup.containsKey(key) ? iconLookup.get(key) : new HashSet<>();
+        iconSet.add(index);
+        iconLookup.put(key, iconSet);
     }
 
     /**
@@ -228,14 +240,17 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
      * @param value The icon to use
      */
     private void addMeshPair(String key, Mesh value) {
-        Set<Mesh> meshList;
-        if (meshMap.containsKey(key)) {
-            meshList = meshMap.get(key);
-        } else {
-            meshList = new HashSet<>();
+        /* Add item to list */
+        int index = meshList.indexOf(value);
+        if (index == -1) {
+            index = meshList.size();
+            meshList.add(value);
         }
-        meshList.add(value);
-        meshMap.put(key, meshList);
+
+        /* Add links to item */
+        Set<Integer> meshSet = meshLookup.containsKey(key) ? meshLookup.get(key) : new HashSet<>();
+        meshSet.add(index);
+        meshLookup.put(key, meshSet);
     }
 
 
