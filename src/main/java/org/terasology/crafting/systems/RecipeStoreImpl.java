@@ -16,15 +16,20 @@
 package org.terasology.crafting.systems;
 
 
+import org.terasology.assets.management.AssetManager;
+import org.terasology.crafting.components.ComponentToIngredientComponent;
+import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.components.Recipe;
-import org.terasology.crafting.listCrafting.components.ListRecipe;
+import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,19 +41,19 @@ import java.util.Set;
 @RegisterSystem
 public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore {
 
+    @In
+    private EntityManager entityManager;
+    @In
+    private AssetManager assetManager;
+
     private List<Recipe> recipeList = new ArrayList<>();
     private Map<String, Set<Integer>> categoryLookup = new HashMap<>();
+    private Map<String, Set<String>> ingredientLookup = new HashMap<>();
 
     public boolean hasCategory(String category) {
         return categoryLookup.containsKey(category.toLowerCase());
     }
 
-    /**
-     * Get a list of all recipes in the given category
-     *
-     * @param category The category to look for
-     * @return All recipes in the category
-     */
     public Recipe[] getRecipes(String category) {
         return getRecipes(new String[]{category});
     }
@@ -66,6 +71,13 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         return getRecipesFromIndices(indices, filterClass);
     }
 
+    /**
+     * Filteres all the recipes with the given indices by a given type
+     * @param indices The indices of the recipes
+     * @param filterClass The class to filter by
+     * @param <T> The type of the filtering Recipe
+     * @return All recipes of that given type
+     */
     private <T extends Recipe> List<T> getRecipesFromIndices(Set<Integer> indices, Class<T> filterClass) {
         if (indices.size() > 0) {
             List<T> recipes = new LinkedList<>();
@@ -81,6 +93,11 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         }
     }
 
+    /**
+     * Get all the indices contained within some given categories
+     * @param categories The categories to collect from.
+     * @return All recipe indices found
+     */
     private Set<Integer> getIndicesInCategories(String[] categories) {
         Set<Integer> indices = new HashSet<>();
         for (String category : categories) {
@@ -125,6 +142,75 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         }
     }
 
+    public String[] getIngredientNames(String name) {
+        name = name.toLowerCase();
+        if (ingredientLookup.containsKey(name)) {
+            return ingredientLookup.get(name).toArray(new String[0]);
+        } else {
+            return null;
+        }
+    }
+
+    public void scrapeIngredientNames() {
+        scrapeNames(scrapeComponentMap());
+    }
+
+    /**
+     * Collect all possible names for all prefabs
+     * @param componentMap A mapping from component to names
+     */
+    private void scrapeNames(Map<Class<? extends Component>, Set<String>> componentMap) {
+        for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
+            if (prefab.hasComponent(CraftingIngredientComponent.class)) {
+                addLink(prefab.getName().toLowerCase(),
+                        prefab.getComponent(CraftingIngredientComponent.class).ingredientIds);
+            }
+            for (Class<? extends Component> component : componentMap.keySet()) {
+                if (prefab.hasComponent(component)) {
+                    addLink(prefab.getName().toLowerCase(),
+                            componentMap.get(component));
+                }
+            }
+        }
+    }
+
+    /**
+     * Add a name to the lookup table
+     * @param key The key to use
+     * @param items The names to add
+     */
+    private void addLink(String key, Collection<String> items) {
+        Set<String> names = ingredientLookup.containsKey(key) ? ingredientLookup.get(key) : new HashSet<>();
+        names.addAll(items);
+        ingredientLookup.put(key, names);
+    }
+
+    /**
+     * Collect all the links between components and prefabs
+     * @return A map between components and ingredient names
+     */
+    private Map<Class<? extends Component>, Set<String>> scrapeComponentMap() {
+        Map<Class<? extends Component>, Set<String>> result = new HashMap<>();
+        for (Prefab prefab : assetManager.getLoadedAssets(Prefab.class)) {
+            if (prefab.hasComponent(ComponentToIngredientComponent.class)) {
+                ComponentToIngredientComponent component = prefab.getComponent(ComponentToIngredientComponent.class);
+                for (Map.Entry<String, List<String>> entry : component.componentMap.entrySet()) {
+                    try {
+                        Class<? extends Component> componentClass = entityManager.getComponentLibrary().resolve(entry.getKey().toLowerCase()).getType();
+                        Set<String> ingredientNames = result.containsKey(componentClass) ? result.get(componentClass) : new HashSet<>();
+                        ingredientNames.addAll(entry.getValue());
+                        result.put(componentClass, ingredientNames);
+                    } catch (NullPointerException ignored) {
+                        /* Handle a broken component name */
+                    }
+
+                }
+            }
+        }
+        return result;
+    }
+
+
     /**
      * Adds a recipe to the list
      *
@@ -147,5 +233,4 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
         idList.add(id);
         categoryLookup.put(category, idList);
     }
-
 }

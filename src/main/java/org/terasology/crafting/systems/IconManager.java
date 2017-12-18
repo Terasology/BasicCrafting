@@ -24,6 +24,11 @@ import java.util.Set;
 
 public interface IconManager {
     /**
+     * Collect all the icons for all the ingredients
+     */
+    void scrapeIcons();
+
+    /**
      * Get's all meshes associated with a key
      *
      * @param key The key to use

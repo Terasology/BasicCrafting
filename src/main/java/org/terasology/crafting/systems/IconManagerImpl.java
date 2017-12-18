@@ -18,7 +18,6 @@ package org.terasology.crafting.systems;
 
 import com.google.common.collect.Iterables;
 import org.terasology.assets.management.AssetManager;
-import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -58,26 +57,18 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
     private EntityManager entityManager;
     @In
     private BlockManager blockManager;
+    @In
+    private RecipeStore recipeStore;
 
     private BlockExplorer blockExplorer;
 
-    /**
-     * Called just before the world is loaded.
-     * Used to initiate retrieving all the icons
-     */
-    @Override
-    public void postBegin() {
+
+    public void scrapeIcons() {
         blockExplorer = new BlockExplorer(assetManager);
         loadItems();
         loadBlocks();
     }
 
-    /**
-     * Get's all meshes associated with a key
-     *
-     * @param key The key to use
-     * @return All the Meshes found or null if the key doesn't exist.
-     */
     public Mesh[] getMesh(String key) {
         key = key.toLowerCase();
         if (meshLookup.containsKey(key)) {
@@ -94,12 +85,6 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         }
     }
 
-    /**
-     * Get all icons associated with a key
-     *
-     * @param key The key to use
-     * @return All Icons found or null if the key doesn't exist.
-     */
     public TextureRegion[] getIcon(String key) {
         key = key.toLowerCase();
         if (iconLookup.containsKey(key)) {
@@ -116,31 +101,14 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
         }
     }
 
-    /**
-     * Check if there are any icons associated with the key
-     *
-     * @param key The key to look for
-     * @return True if the key exists, false otherwise
-     */
     public boolean hasIcon(String key) {
         return iconLookup.containsKey(key.toLowerCase());
     }
 
-    /**
-     * Check if there are any Meshes associated with the key
-     *
-     * @param key The key to look for
-     * @return True if the key exists, false otherwise
-     */
     public boolean hasMesh(String key) {
         return meshLookup.containsKey(key.toLowerCase());
     }
 
-    /**
-     * Get the texture to use for the Meshes.
-     *
-     * @return The Texture to use.
-     */
     public Texture getTexture() {
         return texture;
     }
@@ -159,11 +127,9 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
                         TextureRegion icon = itemComponent.icon;
 
                         /* Add link between the ingredient names and icon */
-                        if (prefab.hasComponent(CraftingIngredientComponent.class)) {
-                            CraftingIngredientComponent ingredient = prefab.getComponent(CraftingIngredientComponent.class);
-                            for (String id : ingredient.ingredientIds) {
-                                addIconPair(id.toLowerCase(), icon);
-                            }
+                        String[] otherNames = recipeStore.getIngredientNames(prefab.getName());
+                        for (String otherName : otherNames) {
+                            addIconPair(otherName.toLowerCase(), icon);
                         }
                         /* Add link between full prefab name and icon */
                         addIconPair(prefab.getName().toLowerCase(), icon);

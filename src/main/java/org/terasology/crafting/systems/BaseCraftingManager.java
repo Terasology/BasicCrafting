@@ -15,18 +15,22 @@
  */
 package org.terasology.crafting.systems;
 
-import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryUtils;
+import org.terasology.registry.In;
 import org.terasology.world.block.items.BlockItemComponent;
+
 
 /**
  * A base crafting manager that implements a number of helpful methods.
  */
 public abstract class BaseCraftingManager extends BaseComponentSystem {
+
+    @In
+    private RecipeStore recipeStore;
 
     /**
      * Checks if the item is the same one being looked for.
@@ -94,14 +98,7 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
      * @return True if they match, false otherwise.
      */
     private boolean matchesOtherName(EntityRef item, String name) {
-        if (item.hasComponent(CraftingIngredientComponent.class)) {
-            CraftingIngredientComponent component = item.getComponent(CraftingIngredientComponent.class);
-            for (String id : component.ingredientIds) {
-                if (name.equalsIgnoreCase(id)) {
-                    return true;
-                }
-            }
-        } else if (item.hasComponent(BlockItemComponent.class)) {
+        if (item.hasComponent(BlockItemComponent.class)) {
             BlockItemComponent component = item.getComponent(BlockItemComponent.class);
             for (String category : component.blockFamily.getCategories()) {
                 if (name.equalsIgnoreCase(category)) {
@@ -109,6 +106,13 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
                 }
             }
 
+        } else {
+            String[] otherNames = recipeStore.getIngredientNames(item.getParentPrefab().getName());
+            for (String otherName : otherNames) {
+                if (name.equalsIgnoreCase(otherName)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
