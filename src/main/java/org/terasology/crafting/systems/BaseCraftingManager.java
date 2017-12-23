@@ -108,9 +108,11 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
 
         } else {
             String[] otherNames = recipeStore.getIngredientNames(item.getParentPrefab().getName());
-            for (String otherName : otherNames) {
-                if (name.equalsIgnoreCase(otherName)) {
-                    return true;
+            if (otherNames != null) {
+                for (String otherName : otherNames) {
+                    if (name.equalsIgnoreCase(otherName)) {
+                        return true;
+                    }
                 }
             }
         }
