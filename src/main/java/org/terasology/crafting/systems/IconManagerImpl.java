@@ -128,8 +128,10 @@ public class IconManagerImpl extends BaseComponentSystem implements IconManager 
 
                         /* Add link between the ingredient names and icon */
                         String[] otherNames = recipeStore.getIngredientNames(prefab.getName());
-                        for (String otherName : otherNames) {
-                            addIconPair(otherName.toLowerCase(), icon);
+                        if (otherNames != null) {
+                            for (String otherName : otherNames) {
+                                addIconPair(otherName.toLowerCase(), icon);
+                            }
                         }
                         /* Add link between full prefab name and icon */
                         addIconPair(prefab.getName().toLowerCase(), icon);
