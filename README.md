@@ -11,7 +11,7 @@ inputs in their inventory then the output can be crafted.
 This method supports multiple ways of specifying an item to
 allow for different items to be used as the same input.
 
-To open up the crafting window press the `N` button
+To open up the crafting window press the `F` button
 
 # Developers
 

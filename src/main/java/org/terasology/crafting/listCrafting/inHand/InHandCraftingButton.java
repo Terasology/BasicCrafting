@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,6 @@ import org.terasology.input.InputType;
 import org.terasology.input.RegisterBindButton;
 
 @RegisterBindButton(id = "inHandCrafting", description = "In-hand crafting", category = "interaction")
-@DefaultBinding(type = InputType.KEY, id = Keyboard.KEY_N)
+@DefaultBinding(type = InputType.KEY, id = Keyboard.KEY_F)
 public class InHandCraftingButton extends BindButtonEvent {
 }
