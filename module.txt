@@ -4,7 +4,9 @@
     "author" : "jellysnake",
     "displayName" : "BasicCrafting",
     "description" : "Provides a framework for crafting and a simple crafting method",
-    "dependencies" : [],
+    "dependencies" : [
+        {"id": "Inventory", "minVersion": "1.1.0"}
+    ],
     "serverSideOnly" : false,
     "isLibrary": true
 }
