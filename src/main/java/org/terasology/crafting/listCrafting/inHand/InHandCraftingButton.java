@@ -15,13 +15,13 @@
  */
 package org.terasology.crafting.listCrafting.inHand;
 
-import org.lwjgl.input.Keyboard;
 import org.terasology.input.BindButtonEvent;
 import org.terasology.input.DefaultBinding;
 import org.terasology.input.InputType;
+import org.terasology.input.Keyboard;
 import org.terasology.input.RegisterBindButton;
 
 @RegisterBindButton(id = "inHandCrafting", description = "In-hand crafting", category = "interaction")
-@DefaultBinding(type = InputType.KEY, id = Keyboard.KEY_F)
+@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.F)
 public class InHandCraftingButton extends BindButtonEvent {
 }
