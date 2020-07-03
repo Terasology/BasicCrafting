@@ -15,6 +15,7 @@
  */
 package org.terasology.crafting.listCrafting.UI;
 
+import org.terasology.crafting.events.OnRecipeCrafted;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
@@ -66,7 +67,7 @@ public class UIWorkstationView extends CoreWidget {
         craftButton.subscribe(widget -> {
             ListRecipe selectedRecipe = recipeList.getSelectedRecipe();
             if (selectedRecipe != null) {
-                newCraftingManager.craftRecipe(craftingEntity, selectedRecipe, true);
+                craftingEntity.send(new OnRecipeCrafted(selectedRecipe, true, newCraftingManager));
             }
         });
         craftButton.setText("Craft");
