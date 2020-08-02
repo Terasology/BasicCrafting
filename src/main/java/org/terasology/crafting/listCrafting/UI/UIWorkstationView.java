@@ -67,7 +67,7 @@ public class UIWorkstationView extends CoreWidget {
         craftButton.subscribe(widget -> {
             ListRecipe selectedRecipe = recipeList.getSelectedRecipe();
             if (selectedRecipe != null) {
-                craftingEntity.send(new OnRecipeCrafted(selectedRecipe, true, newCraftingManager));
+                newCraftingManager.craftRecipe(craftingEntity, selectedRecipe, true);
             }
         });
         craftButton.setText("Craft");

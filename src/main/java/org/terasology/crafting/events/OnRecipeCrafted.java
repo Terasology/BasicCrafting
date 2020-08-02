@@ -3,31 +3,17 @@
 
 package org.terasology.crafting.events;
 
-import org.terasology.crafting.listCrafting.components.ListRecipe;
-import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
 public class OnRecipeCrafted implements Event {
-    private ListRecipe recipe;
-    private boolean giveToCrafter;
-    private ListCraftingManager craftingManager;
+    private EntityRef[] ingredients;
 
-    public OnRecipeCrafted(ListRecipe recipe, boolean giveToCrafter, ListCraftingManager craftingManager) {
-        this.craftingManager = craftingManager;
-        this.recipe = recipe;
-        this.giveToCrafter = giveToCrafter;
+    public OnRecipeCrafted(EntityRef[] ingredients) {
+        this.ingredients=ingredients;
     }
 
-    public boolean isGiveToCrafter() {
-        return giveToCrafter;
-    }
-
-    public ListCraftingManager getCraftingManager() {
-        return craftingManager;
-    }
-
-    public ListRecipe getRecipe() {
-        return recipe;
+    public EntityRef[] getIngredients() {
+        return ingredients;
     }
 }

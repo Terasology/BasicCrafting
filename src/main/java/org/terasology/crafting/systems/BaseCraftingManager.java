@@ -23,6 +23,8 @@ import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.registry.In;
 import org.terasology.world.block.items.BlockItemComponent;
 
+import java.util.Arrays;
+
 
 /**
  * A base crafting manager that implements a number of helpful methods.
@@ -132,7 +134,12 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
         }
         int[] slots = new int[recipe.inputItems.length];
         for (int i = 0; i < recipe.inputItems.length; i++) {
-            int slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i]);
+            int slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i],0);
+            for (int j = 0; j < slots.length; j++) {
+                if (slots[j]==slot) {
+                    slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i], slot + 1);
+                }
+            }
             if (slot != -1) {
                 slots[i] = slot;
             } else {
@@ -150,9 +157,9 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
      * @param item   The name of the item being looked for
      * @return The slot containing the item or -1 if it was not found
      */
-    private int findInInventory(EntityRef entity, String item, int count) {
+    private int findInInventory(EntityRef entity, String item, int count, int start) {
         int slotCount = InventoryUtils.getSlotCount(entity);
-        for (int i = 0; i < slotCount; i++) {
+        for (int i = start; i < slotCount; i++) {
             EntityRef slotItem = InventoryUtils.getItemAt(entity, i);
             int stackSize = InventoryUtils.getStackCount(slotItem);
             if (stackSize >= count && itemMatchesIngredientName(slotItem, item)) {
