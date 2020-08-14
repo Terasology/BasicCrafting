@@ -6,6 +6,11 @@ package org.terasology.crafting.events;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
+/**
+ * This event is sent on an item when it is crafted in a workstation.
+ * The event is sent on the produce with the ingredients as parameters.
+ * Can be used to modify the produce with some values dictated by the ingredients.
+ */
 public class OnRecipeCrafted implements Event {
     private EntityRef[] ingredients;
 
