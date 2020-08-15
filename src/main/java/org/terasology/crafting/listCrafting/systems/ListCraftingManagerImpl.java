@@ -64,7 +64,6 @@ public class ListCraftingManagerImpl extends BaseCraftingManager implements List
     public EntityRef[] craftRecipe(EntityRef craftingEntity, ListRecipe recipe, boolean giveToCrafter) {
 
         int[] slots = getSlots(craftingEntity, recipe);
-        EntityRef firstItem = inventoryManager.getItemInSlot(craftingEntity,slots[0]).copy();
 
         EntityRef removedItems[] = new EntityRef[recipe.inputCounts.length];
         if (slots != null) {
