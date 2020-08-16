@@ -15,13 +15,22 @@
  */
 package org.terasology.crafting.systems;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.logic.inventory.InventoryComponent;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.InventoryUtils;
+import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.registry.In;
 import org.terasology.world.block.items.BlockItemComponent;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -29,12 +38,14 @@ import org.terasology.world.block.items.BlockItemComponent;
  */
 public abstract class BaseCraftingManager extends BaseComponentSystem {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseCraftingManager.class);
+
     @In
     private RecipeStore recipeStore;
 
     /**
-     * Checks if the item is the same one being looked for.
-     * Will check if the item matches the full name, short name or any alternative ingredient names.
+     * Checks if the item is the same one being looked for. Will check if the item matches the full name, short name or
+     * any alternative ingredient names.
      *
      * @param item The item to check
      * @param name The item being looked for
@@ -59,7 +70,7 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
             if (name.equalsIgnoreCase(item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
                 return true;
             }
-        /* Check the prefab name */
+            /* Check the prefab name */
         } else if (name.equalsIgnoreCase(item.getParentPrefab().getName())) {
             return true;
         }
@@ -76,11 +87,12 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
     private boolean matchesShortName(EntityRef item, String name) {
         /* Check the short form of a block */
         if (item.hasComponent(BlockItemComponent.class)) {
-            String blockName = item.getComponent(BlockItemComponent.class).blockFamily.getURI().getBlockFamilyDefinitionUrn().getResourceName().toString();
+            String blockName =
+                    item.getComponent(BlockItemComponent.class).blockFamily.getURI().getBlockFamilyDefinitionUrn().getResourceName().toString();
             if (name.equalsIgnoreCase(blockName)) {
                 return true;
             }
-        /* Check short form of prefab */
+            /* Check short form of prefab */
         } else {
             String prefabName = item.getParentPrefab().getUrn().getResourceName().toString();
             if (name.equalsIgnoreCase(prefabName)) {
@@ -130,29 +142,45 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
         if (!entity.hasComponent(InventoryComponent.class)) {
             return null;
         }
+
+        InventoryComponent inventory = entity.getComponent(InventoryComponent.class);
+
         int[] slots = new int[recipe.inputItems.length];
+        Map<Integer, Integer> slotStacks = new HashMap<>();
         for (int i = 0; i < recipe.inputItems.length; i++) {
-            int slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i]);
+            int slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i], 0);
+            ItemComponent item = inventory.itemSlots.get(slot).getComponent(ItemComponent.class);
+            if (slotStacks.containsKey(slot)) {
+                while (slotStacks.containsKey(slot) && slotStacks.get(slot) == 0) {
+                    slot = findInInventory(entity, recipe.inputItems[i], recipe.inputCounts[i], slot + 1);
+                }
+                slotStacks.put(slot, (int) item.stackCount);
+            } else {
+                slotStacks.put(slot, (int) item.stackCount);
+            }
+
+            slotStacks.put(slot, slotStacks.get(slot) - 1);
             if (slot != -1) {
                 slots[i] = slot;
             } else {
                 return null;
             }
         }
+
         return slots;
     }
 
     /**
-     * Locates the position of a given String item name in an inventory.
-     * Attempts to match the string against either the prefab name, block name or the CraftingIngredientComponent (if one exists)
+     * Locates the position of a given String item name in an inventory. Attempts to match the string against either the
+     * prefab name, block name or the CraftingIngredientComponent (if one exists)
      *
      * @param entity The entity to look in for the item
-     * @param item   The name of the item being looked for
+     * @param item The name of the item being looked for
      * @return The slot containing the item or -1 if it was not found
      */
-    private int findInInventory(EntityRef entity, String item, int count) {
+    private int findInInventory(EntityRef entity, String item, int count, int start) {
         int slotCount = InventoryUtils.getSlotCount(entity);
-        for (int i = 0; i < slotCount; i++) {
+        for (int i = start; i < slotCount; i++) {
             EntityRef slotItem = InventoryUtils.getItemAt(entity, i);
             int stackSize = InventoryUtils.getStackCount(slotItem);
             if (stackSize >= count && itemMatchesIngredientName(slotItem, item)) {
