@@ -1,31 +1,19 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 package org.terasology.crafting.listCrafting.UI;
 
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.CoreWidget;
-import org.terasology.rendering.nui.layouts.ScrollableArea;
-import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.math.JomlUtil;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.CoreWidget;
+import org.terasology.nui.layouts.ScrollableArea;
+import org.terasology.nui.widgets.UIButton;
 
 import javax.swing.*;
 
@@ -45,9 +33,9 @@ public class UIWorkstationView extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         int xOffset = (canvas.size().x - 5 * ICON_SIZE) / 2;
-        canvas.drawWidget(scrollableArea, Rect2i.createFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28, 3 * ICON_SIZE));
-        canvas.drawWidget(recipeView, Rect2i.createFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4, canvas.size().x, ICON_SIZE));
-        canvas.drawWidget(craftButton, Rect2i.createFromMinAndSize(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
+        canvas.drawWidget(scrollableArea, JomlUtil.rectangleiFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28, 3 * ICON_SIZE));
+        canvas.drawWidget(recipeView, JomlUtil.rectangleiFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4, canvas.size().x, ICON_SIZE));
+        canvas.drawWidget(craftButton, JomlUtil.rectangleiFromMinAndSize(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
     }
 
     @Override
