@@ -17,11 +17,11 @@
 package org.terasology.crafting.systems;
 
 import com.google.common.collect.Iterables;
-import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;

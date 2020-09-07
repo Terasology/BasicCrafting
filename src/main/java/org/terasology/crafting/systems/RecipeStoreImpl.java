@@ -16,7 +16,6 @@
 package org.terasology.crafting.systems;
 
 
-import org.terasology.assets.management.AssetManager;
 import org.terasology.crafting.components.ComponentToIngredientComponent;
 import org.terasology.crafting.components.CraftingIngredientComponent;
 import org.terasology.crafting.components.Recipe;
@@ -25,6 +24,7 @@ import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
