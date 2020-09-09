@@ -3,21 +3,21 @@
 
 package org.terasology.crafting.listCrafting.UI;
 
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.math.JomlUtil;
-import org.joml.Vector2i;
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.math.JomlUtil;
+import org.terasology.engine.rendering.assets.mesh.Mesh;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.inventory.rendering.nui.layers.ingame.ItemIcon;
 import org.terasology.nui.BaseInteractionListener;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
 import org.terasology.nui.events.NUIMouseClickEvent;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.nui.widgets.ActivateEventListener;
 import org.terasology.nui.widgets.TooltipLine;
-import org.terasology.utilities.Assets;
 
 import java.util.Collections;
 
@@ -26,17 +26,13 @@ import java.util.Collections;
  */
 public class UIRecipeList extends CoreWidget {
     private static final int ICON_SIZE = 64;
-
+    private final TextureRegion selectedTexture = Assets.getTexture("BasicCrafting:selectedIcon").get();
     private IconManager iconManager;
     private RecipeStore recipeStore;
-
     private String workstationID = "InHand";
-
     private ListRecipe[] recipes = new ListRecipe[0];
     private ItemIcon[] icons = new ItemIcon[0];
     private int selectedRecipe = -1;
-    private TextureRegion selectedTexture = Assets.getTexture("BasicCrafting:selectedIcon").get();
-
     private ActivateEventListener listener;
 
     @Override
@@ -46,9 +42,11 @@ public class UIRecipeList extends CoreWidget {
             for (int y = 0; i < recipes.length; y++) {
                 for (int x = 0; x < 5 && i < recipes.length; x++) {
                     if (i == selectedRecipe) {
-                        canvas.drawTexture(selectedTexture, JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                        canvas.drawTexture(selectedTexture, JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x,
+                                ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     }
-                    canvas.drawWidget(icons[i], JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                    canvas.drawWidget(icons[i], JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y,
+                            ICON_SIZE, ICON_SIZE));
                     i++;
                 }
             }
@@ -63,8 +61,7 @@ public class UIRecipeList extends CoreWidget {
     }
 
     /**
-     * Called when a mouse is clicked on the widget.
-     * Calculates the selected recipe and flips a flag boolean
+     * Called when a mouse is clicked on the widget. Calculates the selected recipe and flips a flag boolean
      *
      * @param event The click event.
      * @return True to consume the mouse click event
@@ -111,8 +108,7 @@ public class UIRecipeList extends CoreWidget {
     }
 
     /**
-     * Set the workstation ID.
-     * Triggers a collection of recipes for that workstation.
+     * Set the workstation ID. Triggers a collection of recipes for that workstation.
      *
      * @param newID The new id of the workstation
      */
@@ -162,7 +158,7 @@ public class UIRecipeList extends CoreWidget {
      * Choose the first available mesh for the recipe
      *
      * @param iconID The id of the mesh to look for
-     * @param icon   The ItemIcon to set the mesh on
+     * @param icon The ItemIcon to set the mesh on
      */
     private void chooseMesh(String iconID, ItemIcon icon) {
         Object[] meshes = iconManager.getMesh(iconID);
@@ -181,7 +177,7 @@ public class UIRecipeList extends CoreWidget {
      * Choose the first available TextureRegion for the recipe
      *
      * @param iconID The ID of the icon to use
-     * @param icon   The ItemIcon to set it on
+     * @param icon The ItemIcon to set it on
      */
     private void chooseIcon(String iconID, ItemIcon icon) {
         Object[] foundIcons = iconManager.getIcon(iconID);

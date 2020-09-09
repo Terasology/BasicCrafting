@@ -8,34 +8,33 @@ import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.JomlUtil;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.math.JomlUtil;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
 import org.terasology.nui.layouts.ScrollableArea;
 import org.terasology.nui.widgets.UIButton;
 
-import javax.swing.*;
-
 public class UIWorkstationView extends CoreWidget {
 
     private static final int ICON_SIZE = 64;
     private static final float UPDATE_ICON_STEP = 1.2f;
+    private final ScrollableArea scrollableArea = new ScrollableArea();
+    private final UIRecipeView recipeView = new UIRecipeView();
+    private final UIRecipeList recipeList = new UIRecipeList();
+    private final UIButton craftButton = new UIButton();
     private float counter;
-
-    private ScrollableArea scrollableArea = new ScrollableArea();
-    private UIRecipeView recipeView = new UIRecipeView();
-    private UIRecipeList recipeList = new UIRecipeList();
-    private UIButton craftButton = new UIButton();
-
     private EntityRef craftingEntity;
 
     @Override
     public void onDraw(Canvas canvas) {
         int xOffset = (canvas.size().x - 5 * ICON_SIZE) / 2;
-        canvas.drawWidget(scrollableArea, JomlUtil.rectangleiFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28, 3 * ICON_SIZE));
-        canvas.drawWidget(recipeView, JomlUtil.rectangleiFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4, canvas.size().x, ICON_SIZE));
-        canvas.drawWidget(craftButton, JomlUtil.rectangleiFromMinAndSize(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
+        canvas.drawWidget(scrollableArea, JomlUtil.rectangleiFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28,
+                3 * ICON_SIZE));
+        canvas.drawWidget(recipeView, JomlUtil.rectangleiFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4,
+                canvas.size().x, ICON_SIZE));
+        canvas.drawWidget(craftButton, JomlUtil.rectangleiFromMinAndSize(xOffset + ICON_SIZE,
+                4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
     }
 
     @Override
@@ -44,7 +43,8 @@ public class UIWorkstationView extends CoreWidget {
         return new Vector2i(Math.max(5 * ICON_SIZE, viewSize.x), (int) (5.5 * ICON_SIZE));
     }
 
-    public void initialise(ListCraftingManager newCraftingManager, RecipeStore newRecipeStore, IconManager newIconManager) {
+    public void initialise(ListCraftingManager newCraftingManager, RecipeStore newRecipeStore,
+                           IconManager newIconManager) {
 
         recipeList.setManagers(newRecipeStore, newIconManager);
         recipeList.subscribeRecipeView(widget -> recipeView.updateRecipe(((UIRecipeList) widget).getSelectedRecipe()));

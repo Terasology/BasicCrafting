@@ -3,33 +3,30 @@
 
 package org.terasology.crafting.listCrafting.UI;
 
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
-import org.joml.Vector2i;
-import org.terasology.math.JomlUtil;
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.math.JomlUtil;
+import org.terasology.engine.rendering.assets.mesh.Mesh;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.inventory.rendering.nui.layers.ingame.ItemIcon;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.utilities.Assets;
-import org.terasology.utilities.random.FastRandom;
 
 /**
  * Display a recipe
  */
 public class UIRecipeView extends CoreWidget {
     private static final int ICON_SIZE = 64;
-
+    private final FastRandom random = new FastRandom();
+    private final TextureRegion addTexture = Assets.getTextureRegion("BasicCrafting:AddIcon").get();
+    private final TextureRegion equalsTexture = Assets.getTextureRegion("BasicCrafting:EqualsIcon").get();
+    private final ItemIcon result = new ItemIcon();
     private IconManager iconManager;
-    private FastRandom random = new FastRandom();
-
-    private TextureRegion addTexture = Assets.getTextureRegion("BasicCrafting:AddIcon").get();
-    private TextureRegion equalsTexture = Assets.getTextureRegion("BasicCrafting:EqualsIcon").get();
-
     private ListRecipe recipe;
     private ItemIcon[] inputIcons = null;
-    private ItemIcon result = new ItemIcon();
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -38,11 +35,14 @@ public class UIRecipeView extends CoreWidget {
             int i;
             for (i = 0; i < inputIcons.length; i++) {
                 if (i > 0) {
-                    canvas.drawTexture(addTexture, JomlUtil.rectangleiFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+                    canvas.drawTexture(addTexture, JomlUtil.rectangleiFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0,
+                            ICON_SIZE, ICON_SIZE));
                 }
-                canvas.drawWidget(inputIcons[i], JomlUtil.rectangleiFromMinAndSize(i * 2 * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+                canvas.drawWidget(inputIcons[i], JomlUtil.rectangleiFromMinAndSize(i * 2 * ICON_SIZE, 0, ICON_SIZE,
+                        ICON_SIZE));
             }
-            canvas.drawTexture(equalsTexture, JomlUtil.rectangleiFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+            canvas.drawTexture(equalsTexture, JomlUtil.rectangleiFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0, ICON_SIZE
+                    , ICON_SIZE));
             canvas.drawWidget(result, JomlUtil.rectangleiFromMinAndSize(i * 2 * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
         }
     }
@@ -62,8 +62,7 @@ public class UIRecipeView extends CoreWidget {
     }
 
     /**
-     * Called every tick.
-     * Checks if a new recipe is available and updates if there is.
+     * Called every tick. Checks if a new recipe is available and updates if there is.
      */
     public void updateRecipe(ListRecipe newRecipe) {
         if (newRecipe != null) {
@@ -106,7 +105,7 @@ public class UIRecipeView extends CoreWidget {
      * Pick a random icon for the item.
      *
      * @param iconID The item to look for items for
-     * @param icon   The icon to set the choice on
+     * @param icon The icon to set the choice on
      */
     private void increment(String iconID, ItemIcon icon) {
         if (iconManager.hasIcon(iconID) && iconManager.hasMesh(iconID)) {
@@ -127,7 +126,7 @@ public class UIRecipeView extends CoreWidget {
      * Choose the first available mesh for the recipe
      *
      * @param iconID The id of the mesh to look for
-     * @param icon   The ItemIcon to set the mesh on
+     * @param icon The ItemIcon to set the mesh on
      */
     private void chooseMesh(String iconID, ItemIcon icon) {
         Object[] meshes = iconManager.getMesh(iconID);
@@ -148,7 +147,7 @@ public class UIRecipeView extends CoreWidget {
      * Choose the first available TextureRegion for the recipe
      *
      * @param iconID The ID of the icon to use
-     * @param icon   The ItemIcon to set it on
+     * @param icon The ItemIcon to set it on
      */
     private void chooseIcon(String iconID, ItemIcon icon) {
         TextureRegion[] icons = iconManager.getIcon(iconID);

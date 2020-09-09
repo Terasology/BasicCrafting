@@ -1,34 +1,19 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.crafting.systems;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.InventoryUtils;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.registry.In;
-import org.terasology.world.block.items.BlockItemComponent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.inventory.logic.InventoryComponent;
+import org.terasology.inventory.logic.InventoryUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,14 +52,9 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
     private boolean matchesExactly(EntityRef item, String name) {
         /* Check if it's a block */
         if (item.hasComponent(BlockItemComponent.class)) {
-            if (name.equalsIgnoreCase(item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString())) {
-                return true;
-            }
+            return name.equalsIgnoreCase(item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString());
             /* Check the prefab name */
-        } else if (name.equalsIgnoreCase(item.getParentPrefab().getName())) {
-            return true;
-        }
-        return false;
+        } else return name.equalsIgnoreCase(item.getParentPrefab().getName());
     }
 
     /**
@@ -89,17 +69,12 @@ public abstract class BaseCraftingManager extends BaseComponentSystem {
         if (item.hasComponent(BlockItemComponent.class)) {
             String blockName =
                     item.getComponent(BlockItemComponent.class).blockFamily.getURI().getBlockFamilyDefinitionUrn().getResourceName().toString();
-            if (name.equalsIgnoreCase(blockName)) {
-                return true;
-            }
+            return name.equalsIgnoreCase(blockName);
             /* Check short form of prefab */
         } else {
             String prefabName = item.getParentPrefab().getUrn().getResourceName().toString();
-            if (name.equalsIgnoreCase(prefabName)) {
-                return true;
-            }
+            return name.equalsIgnoreCase(prefabName);
         }
-        return false;
     }
 
     /**
