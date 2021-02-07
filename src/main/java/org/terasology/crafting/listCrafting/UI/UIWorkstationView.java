@@ -9,13 +9,11 @@ import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.JomlUtil;
+import org.terasology.joml.geom.Rectanglei;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
 import org.terasology.nui.layouts.ScrollableArea;
 import org.terasology.nui.widgets.UIButton;
-
-import javax.swing.*;
 
 public class UIWorkstationView extends CoreWidget {
 
@@ -33,9 +31,12 @@ public class UIWorkstationView extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         int xOffset = (canvas.size().x - 5 * ICON_SIZE) / 2;
-        canvas.drawWidget(scrollableArea, JomlUtil.rectangleiFromMinAndSize(xOffset, 0, 5 * ICON_SIZE + 28, 3 * ICON_SIZE));
-        canvas.drawWidget(recipeView, JomlUtil.rectangleiFromMinAndSize(0, 3 * ICON_SIZE + ICON_SIZE / 4, canvas.size().x, ICON_SIZE));
-        canvas.drawWidget(craftButton, JomlUtil.rectangleiFromMinAndSize(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2, 3 * ICON_SIZE, ICON_SIZE / 2));
+        canvas.drawWidget(scrollableArea, new Rectanglei(xOffset, 0).setSize(5 * ICON_SIZE + 28, 3 * ICON_SIZE));
+        canvas.drawWidget(recipeView, new Rectanglei(0, 3 * ICON_SIZE + ICON_SIZE / 4).setSize(canvas.size().x,
+                ICON_SIZE));
+        canvas.drawWidget(craftButton,
+                new Rectanglei(xOffset + ICON_SIZE, 4 * ICON_SIZE + ICON_SIZE / 2).setSize(3 * ICON_SIZE,
+                        ICON_SIZE / 2));
     }
 
     @Override
@@ -44,7 +45,8 @@ public class UIWorkstationView extends CoreWidget {
         return new Vector2i(Math.max(5 * ICON_SIZE, viewSize.x), (int) (5.5 * ICON_SIZE));
     }
 
-    public void initialise(ListCraftingManager newCraftingManager, RecipeStore newRecipeStore, IconManager newIconManager) {
+    public void initialise(ListCraftingManager newCraftingManager, RecipeStore newRecipeStore,
+                           IconManager newIconManager) {
 
         recipeList.setManagers(newRecipeStore, newIconManager);
         recipeList.subscribeRecipeView(widget -> recipeView.updateRecipe(((UIRecipeList) widget).getSelectedRecipe()));
