@@ -3,20 +3,20 @@
 
 package org.terasology.crafting.listCrafting.UI;
 
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.math.JomlUtil;
-import org.joml.Vector2i;
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.joml.geom.Rectanglei;
 import org.terasology.nui.BaseInteractionListener;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
 import org.terasology.nui.events.NUIMouseClickEvent;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.nui.widgets.ActivateEventListener;
 import org.terasology.nui.widgets.TooltipLine;
+import org.terasology.rendering.assets.mesh.Mesh;
+import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.utilities.Assets;
 
 import java.util.Collections;
@@ -46,9 +46,9 @@ public class UIRecipeList extends CoreWidget {
             for (int y = 0; i < recipes.length; y++) {
                 for (int x = 0; x < 5 && i < recipes.length; x++) {
                     if (i == selectedRecipe) {
-                        canvas.drawTexture(selectedTexture, JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                        canvas.drawTexture(selectedTexture, new Rectanglei(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     }
-                    canvas.drawWidget(icons[i], JomlUtil.rectangleiFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                    canvas.drawWidget(icons[i], new Rectanglei(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     i++;
                 }
             }
