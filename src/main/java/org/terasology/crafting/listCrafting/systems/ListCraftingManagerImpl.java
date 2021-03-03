@@ -15,7 +15,10 @@
  */
 package org.terasology.crafting.listCrafting.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.crafting.components.CraftingIngredientComponent;
+import org.terasology.crafting.events.OnRecipeCrafted;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.BaseCraftingManager;
 import org.terasology.crafting.systems.RecipeStore;
@@ -47,6 +50,8 @@ public class ListCraftingManagerImpl extends BaseCraftingManager implements List
     private BlockManager blockManager;
     private BlockItemFactory blockItemFactory;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListCraftingManagerImpl.class);
+
     /**
      * Attempts to craft the given recipe
      * If the recipe is successfully crafted then the inputs will be removed and the resultant item returned.
@@ -59,8 +64,11 @@ public class ListCraftingManagerImpl extends BaseCraftingManager implements List
     public EntityRef[] craftRecipe(EntityRef craftingEntity, ListRecipe recipe, boolean giveToCrafter) {
 
         int[] slots = getSlots(craftingEntity, recipe);
+
+        EntityRef removedItems[] = new EntityRef[recipe.inputCounts.length];
         if (slots != null) {
             for (int i = 0; i < slots.length; i++) {
+                removedItems[i] = inventoryManager.getItemInSlot(craftingEntity,slots[i]).copy();
                 EntityRef removedItem = inventoryManager.removeItem(craftingEntity, craftingEntity, slots[i], true, recipe.inputCounts[i]);
                 if (removedItem == null) {
                     return new EntityRef[0];
@@ -68,13 +76,16 @@ public class ListCraftingManagerImpl extends BaseCraftingManager implements List
             }
             if (giveToCrafter) {
                 for (int i = 0; i < recipe.outputCount; i++) {
-                    inventoryManager.giveItem(craftingEntity, craftingEntity, createResultFromName(recipe.output));
+                    EntityRef resultItem = createResultFromName(recipe.output);
+                    inventoryManager.giveItem(craftingEntity, craftingEntity, resultItem);
+                    resultItem.send(new OnRecipeCrafted(removedItems));
                 }
                 return new EntityRef[0];
             } else {
                 EntityRef[] crafted = new EntityRef[recipe.outputCount];
                 for (int i = 0; i < recipe.outputCount; i++) {
                     crafted[i] = createResultFromName(recipe.output);
+                    crafted[i].send(new OnRecipeCrafted(removedItems));
                 }
                 return crafted;
             }

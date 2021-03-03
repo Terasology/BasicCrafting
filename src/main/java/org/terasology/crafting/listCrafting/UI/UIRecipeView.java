@@ -1,29 +1,16 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.crafting.listCrafting.UI;
 
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
+import org.joml.Vector2i;
+import org.terasology.joml.geom.Rectanglei;
 import org.terasology.rendering.assets.mesh.Mesh;
 import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.CoreWidget;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.CoreWidget;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.utilities.Assets;
 import org.terasology.utilities.random.FastRandom;
@@ -51,12 +38,12 @@ public class UIRecipeView extends CoreWidget {
             int i;
             for (i = 0; i < inputIcons.length; i++) {
                 if (i > 0) {
-                    canvas.drawTexture(addTexture, Rect2i.createFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+                    canvas.drawTexture(addTexture, new Rectanglei((i * 2 - 1) * ICON_SIZE, 0).setSize(ICON_SIZE, ICON_SIZE));
                 }
-                canvas.drawWidget(inputIcons[i], Rect2i.createFromMinAndSize(i * 2 * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+                canvas.drawWidget(inputIcons[i], new Rectanglei(i * 2 * ICON_SIZE, 0).setSize(ICON_SIZE, ICON_SIZE));
             }
-            canvas.drawTexture(equalsTexture, Rect2i.createFromMinAndSize((i * 2 - 1) * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
-            canvas.drawWidget(result, Rect2i.createFromMinAndSize(i * 2 * ICON_SIZE, 0, ICON_SIZE, ICON_SIZE));
+            canvas.drawTexture(equalsTexture, new Rectanglei((i * 2 - 1) * ICON_SIZE, 0).setSize(ICON_SIZE, ICON_SIZE));
+            canvas.drawWidget(result, new Rectanglei(i * 2 * ICON_SIZE, 0).setSize(ICON_SIZE, ICON_SIZE));
         }
     }
 
@@ -75,8 +62,7 @@ public class UIRecipeView extends CoreWidget {
     }
 
     /**
-     * Called every tick.
-     * Checks if a new recipe is available and updates if there is.
+     * Called every tick. Checks if a new recipe is available and updates if there is.
      */
     public void updateRecipe(ListRecipe newRecipe) {
         if (newRecipe != null) {
@@ -119,7 +105,7 @@ public class UIRecipeView extends CoreWidget {
      * Pick a random icon for the item.
      *
      * @param iconID The item to look for items for
-     * @param icon   The icon to set the choice on
+     * @param icon The icon to set the choice on
      */
     private void increment(String iconID, ItemIcon icon) {
         if (iconManager.hasIcon(iconID) && iconManager.hasMesh(iconID)) {
@@ -140,7 +126,7 @@ public class UIRecipeView extends CoreWidget {
      * Choose the first available mesh for the recipe
      *
      * @param iconID The id of the mesh to look for
-     * @param icon   The ItemIcon to set the mesh on
+     * @param icon The ItemIcon to set the mesh on
      */
     private void chooseMesh(String iconID, ItemIcon icon) {
         Object[] meshes = iconManager.getMesh(iconID);
@@ -161,7 +147,7 @@ public class UIRecipeView extends CoreWidget {
      * Choose the first available TextureRegion for the recipe
      *
      * @param iconID The ID of the icon to use
-     * @param icon   The ItemIcon to set it on
+     * @param icon The ItemIcon to set it on
      */
     private void chooseIcon(String iconID, ItemIcon icon) {
         TextureRegion[] icons = iconManager.getIcon(iconID);

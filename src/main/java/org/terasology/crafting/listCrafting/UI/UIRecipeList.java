@@ -1,40 +1,25 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 package org.terasology.crafting.listCrafting.UI;
 
-import org.terasology.crafting.components.Recipe;
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
+import org.terasology.joml.geom.Rectanglei;
+import org.terasology.nui.BaseInteractionListener;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.CoreWidget;
+import org.terasology.nui.events.NUIMouseClickEvent;
+import org.terasology.nui.widgets.ActivateEventListener;
+import org.terasology.nui.widgets.TooltipLine;
 import org.terasology.rendering.assets.mesh.Mesh;
 import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.BaseInteractionListener;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.CoreWidget;
-import org.terasology.rendering.nui.events.NUIMouseClickEvent;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.rendering.nui.widgets.ActivateEventListener;
-import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.utilities.Assets;
 
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Displays a list of all the recipes the workstation can craft.
@@ -61,9 +46,9 @@ public class UIRecipeList extends CoreWidget {
             for (int y = 0; i < recipes.length; y++) {
                 for (int x = 0; x < 5 && i < recipes.length; x++) {
                     if (i == selectedRecipe) {
-                        canvas.drawTexture(selectedTexture, Rect2i.createFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                        canvas.drawTexture(selectedTexture, new Rectanglei(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     }
-                    canvas.drawWidget(icons[i], Rect2i.createFromMinAndSize(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
+                    canvas.drawWidget(icons[i], new Rectanglei(ICON_SIZE * x, ICON_SIZE * y, ICON_SIZE, ICON_SIZE));
                     i++;
                 }
             }
