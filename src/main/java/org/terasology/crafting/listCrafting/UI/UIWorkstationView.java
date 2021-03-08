@@ -8,7 +8,7 @@ import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.joml.geom.Rectanglei;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;

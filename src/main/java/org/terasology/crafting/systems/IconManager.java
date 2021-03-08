@@ -15,10 +15,9 @@
  */
 package org.terasology.crafting.systems;
 
-
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.Texture;
-import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.rendering.assets.mesh.Mesh;
+import org.terasology.engine.rendering.assets.texture.Texture;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
 
 import java.util.Set;
 

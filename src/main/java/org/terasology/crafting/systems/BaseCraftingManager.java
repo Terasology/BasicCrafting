@@ -19,16 +19,14 @@ package org.terasology.crafting.systems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.InventoryUtils;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.registry.In;
-import org.terasology.world.block.items.BlockItemComponent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.logic.inventory.InventoryComponent;
+import org.terasology.engine.logic.inventory.InventoryUtils;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.items.BlockItemComponent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

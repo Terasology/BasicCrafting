@@ -18,10 +18,10 @@ package org.terasology.crafting.listCrafting.UI;
 import org.terasology.crafting.listCrafting.systems.ListCraftingManager;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
-import org.terasology.engine.Time;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+
 
 public class BaseListCraftingScreen extends CoreScreenLayer {
 

@@ -15,10 +15,9 @@
  */
 package org.terasology.crafting.listCrafting.components;
 
-
 import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.components.RecipeComponent;
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 import java.util.Collections;
 import java.util.List;

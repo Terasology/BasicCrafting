@@ -15,7 +15,7 @@
  */
 package org.terasology.crafting.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 import java.util.List;
 import java.util.Map;

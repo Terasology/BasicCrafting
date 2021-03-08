@@ -15,7 +15,7 @@
  */
 package org.terasology.crafting.listCrafting.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 public class CraftingWorkstationComponent implements Component {
     public String recipeCategory;

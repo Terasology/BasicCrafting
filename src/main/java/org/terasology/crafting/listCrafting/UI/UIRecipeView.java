@@ -3,17 +3,17 @@
 
 package org.terasology.crafting.listCrafting.UI;
 
+import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
-import org.joml.Vector2i;
+import org.terasology.engine.rendering.assets.mesh.Mesh;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.utilities.random.FastRandom;
 import org.terasology.joml.geom.Rectanglei;
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.TextureRegion;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.utilities.Assets;
-import org.terasology.utilities.random.FastRandom;
 
 /**
  * Display a recipe

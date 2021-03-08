@@ -7,6 +7,10 @@ import org.joml.Vector2i;
 import org.terasology.crafting.listCrafting.components.ListRecipe;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
+import org.terasology.engine.rendering.assets.mesh.Mesh;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.joml.geom.Rectanglei;
 import org.terasology.nui.BaseInteractionListener;
 import org.terasology.nui.Canvas;
@@ -14,10 +18,6 @@ import org.terasology.nui.CoreWidget;
 import org.terasology.nui.events.NUIMouseClickEvent;
 import org.terasology.nui.widgets.ActivateEventListener;
 import org.terasology.nui.widgets.TooltipLine;
-import org.terasology.rendering.assets.mesh.Mesh;
-import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.utilities.Assets;
 
 import java.util.Collections;
 

@@ -15,9 +15,9 @@
  */
 package org.terasology.crafting.systems;
 
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.registry.In;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.In;
 
 @RegisterSystem
 public class PrefabScraper extends BaseComponentSystem {
@@ -25,7 +25,6 @@ public class PrefabScraper extends BaseComponentSystem {
     private RecipeStore recipeStore;
     @In
     private IconManager iconManager;
-
 
     public void postBegin() {
         recipeStore.scrapeIngredientNames();
