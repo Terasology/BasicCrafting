@@ -9,7 +9,7 @@ import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.engine.rendering.assets.mesh.Mesh;
 import org.terasology.engine.rendering.assets.texture.TextureRegion;
-import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.joml.geom.Rectanglei;
 import org.terasology.nui.BaseInteractionListener;
