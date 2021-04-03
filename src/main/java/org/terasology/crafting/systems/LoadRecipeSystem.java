@@ -15,7 +15,7 @@
  */
 package org.terasology.crafting.systems;
 
-import org.terasology.assets.management.AssetManager;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.components.RecipeComponent;
 import org.terasology.engine.entitySystem.Component;
