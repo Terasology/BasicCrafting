@@ -40,6 +40,7 @@ public class ListRecipesComponent implements Component<ListRecipesComponent>, Re
     @Override
     public void copy(ListRecipesComponent other) {
         this.categories = Lists.newArrayList(other.categories);
-        this.recipes = Maps.newTreeMap(other.recipes);
+        recipes.clear();
+        recipes.putAll(other.recipes);
     }
 }

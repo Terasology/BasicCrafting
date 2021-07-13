@@ -17,6 +17,7 @@ public class CraftingIngredientComponent implements Component<CraftingIngredient
 
     @Override
     public void copy(CraftingIngredientComponent other) {
-        this.ingredientIds = Lists.newLinkedList(ingredientIds);
+        this.ingredientIds.clear();
+        this.ingredientIds.addAll(other.ingredientIds);
     }
 }
