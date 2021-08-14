@@ -18,7 +18,7 @@ public class ComponentToIngredientComponent implements Component<ComponentToIngr
     public Map<String, List<String>> componentMap = new TreeMap<>();
 
     @Override
-    public void copy(ComponentToIngredientComponent other) {
+    public void copyFrom(ComponentToIngredientComponent other) {
         this.componentMap.clear();
         for (Map.Entry<String, List<String>> entry : other.componentMap.entrySet()) {
             this.componentMap.put(entry.getKey(), Lists.newArrayList(entry.getValue()));

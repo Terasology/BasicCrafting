@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.crafting.components;
 
-import com.google.common.collect.Lists;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 import java.util.LinkedList;
@@ -16,7 +15,7 @@ public class CraftingIngredientComponent implements Component<CraftingIngredient
     public List<String> ingredientIds = new LinkedList<>();
 
     @Override
-    public void copy(CraftingIngredientComponent other) {
+    public void copyFrom(CraftingIngredientComponent other) {
         this.ingredientIds.clear();
         this.ingredientIds.addAll(other.ingredientIds);
     }

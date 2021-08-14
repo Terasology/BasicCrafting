@@ -9,7 +9,7 @@ public class CraftingWorkstationComponent implements Component<CraftingWorkstati
     public String recipeCategory;
 
     @Override
-    public void copy(CraftingWorkstationComponent other) {
+    public void copyFrom(CraftingWorkstationComponent other) {
         this.recipeCategory = other.recipeCategory;
     }
 }

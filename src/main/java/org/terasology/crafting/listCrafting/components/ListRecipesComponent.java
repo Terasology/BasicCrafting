@@ -3,7 +3,6 @@
 package org.terasology.crafting.listCrafting.components;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.terasology.crafting.components.Recipe;
 import org.terasology.crafting.components.RecipeComponent;
 import org.terasology.gestalt.entitysystem.component.Component;
@@ -38,7 +37,7 @@ public class ListRecipesComponent implements Component<ListRecipesComponent>, Re
     }
 
     @Override
-    public void copy(ListRecipesComponent other) {
+    public void copyFrom(ListRecipesComponent other) {
         this.categories = Lists.newArrayList(other.categories);
         recipes.clear();
         recipes.putAll(other.recipes);
