@@ -5,7 +5,7 @@ package org.terasology.crafting.events;
 
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 /**
  * This event is sent on an item when it is crafted in a workstation.
