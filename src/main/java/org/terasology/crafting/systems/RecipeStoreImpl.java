@@ -59,6 +59,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
 
     /**
      * Filteres all the recipes with the given indices by a given type
+     *
      * @param indices The indices of the recipes
      * @param filterClass The class to filter by
      * @param <T> The type of the filtering Recipe
@@ -81,15 +82,16 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
 
     /**
      * Get all the indices contained within some given categories
+     *
      * @param categories The categories to collect from.
      * @return All recipe indices found
      */
     private Set<Integer> getIndicesInCategories(String[] categories) {
         Set<Integer> indices = new HashSet<>();
         for (String category : categories) {
-            category = category.toLowerCase();
-            if (categoryLookup.containsKey(category)) {
-                indices.addAll(categoryLookup.get(category));
+            String lowerCategory = category.toLowerCase();
+            if (categoryLookup.containsKey(lowerCategory)) {
+                indices.addAll(categoryLookup.get(lowerCategory));
             }
         }
         return indices;
@@ -117,7 +119,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
     /**
      * Adds a recipe to the store under set categories.
      *
-     * @param recipe     The recipe to add
+     * @param recipe The recipe to add
      * @param categories The categories to add the recipe under
      */
 
@@ -129,9 +131,9 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
     }
 
     public String[] getIngredientNames(String name) {
-        name = name.toLowerCase();
-        if (ingredientLookup.containsKey(name)) {
-            return ingredientLookup.get(name).toArray(new String[0]);
+        String lowerName = name.toLowerCase();
+        if (ingredientLookup.containsKey(lowerName)) {
+            return ingredientLookup.get(lowerName).toArray(new String[0]);
         } else {
             return null;
         }
@@ -143,6 +145,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
 
     /**
      * Collect all possible names for all prefabs
+     *
      * @param componentMap A mapping from component to names
      */
     private void scrapeNames(Map<Class<? extends Component>, Set<String>> componentMap) {
@@ -162,6 +165,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
 
     /**
      * Add a name to the lookup table
+     *
      * @param key The key to use
      * @param items The names to add
      */
@@ -173,6 +177,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
 
     /**
      * Collect all the links between components and prefabs
+     *
      * @return A map between components and ingredient names
      */
     private Map<Class<? extends Component>, Set<String>> scrapeComponentMap() {
@@ -182,7 +187,8 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
                 ComponentToIngredientComponent component = prefab.getComponent(ComponentToIngredientComponent.class);
                 for (Map.Entry<String, List<String>> entry : component.componentMap.entrySet()) {
                     try {
-                        Class<? extends Component> componentClass = entityManager.getComponentLibrary().resolve(entry.getKey().toLowerCase()).getType();
+                        Class<? extends Component> componentClass = entityManager.getComponentLibrary()
+                                .resolve(entry.getKey().toLowerCase()).getType();
                         Set<String> ingredientNames = result.containsKey(componentClass) ? result.get(componentClass) : new HashSet<>();
                         ingredientNames.addAll(entry.getValue());
                         result.put(componentClass, ingredientNames);
@@ -211,7 +217,7 @@ public class RecipeStoreImpl extends BaseComponentSystem implements RecipeStore 
     /**
      * Adds a link between a recipe ID and a category
      *
-     * @param id       The recipe's ID
+     * @param id The recipe's ID
      * @param category The category to add the recipe to
      */
     private void addLinkToRecipe(int id, String category) {

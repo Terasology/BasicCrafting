@@ -1,4 +1,4 @@
-// Copyright 2020 The Terasology Foundation
+// Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.crafting.events;
@@ -16,7 +16,7 @@ public class OnRecipeCrafted implements Event {
     private EntityRef[] ingredients;
 
     public OnRecipeCrafted(EntityRef[] ingredients) {
-        this.ingredients=ingredients;
+        this.ingredients = ingredients;
     }
 
     public EntityRef[] getIngredients() {

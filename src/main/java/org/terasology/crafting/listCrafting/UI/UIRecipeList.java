@@ -1,4 +1,4 @@
-// Copyright 2020 The Terasology Foundation
+// Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.crafting.listCrafting.UI;
@@ -9,9 +9,9 @@ import org.terasology.crafting.systems.IconManager;
 import org.terasology.crafting.systems.RecipeStore;
 import org.terasology.engine.rendering.assets.mesh.Mesh;
 import org.terasology.engine.rendering.assets.texture.TextureRegion;
-import org.terasology.module.inventory.ui.ItemIcon;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.joml.geom.Rectanglei;
+import org.terasology.module.inventory.ui.ItemIcon;
 import org.terasology.nui.BaseInteractionListener;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
