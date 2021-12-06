@@ -7,7 +7,7 @@ import org.terasology.crafting.listCrafting.inHand.InHandCraftingButton;
 import org.terasology.crafting.systems.IconManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -15,6 +15,7 @@ import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.ButtonState;
 
 @RegisterSystem(RegisterMode.ALWAYS)
@@ -52,7 +53,8 @@ public class ListUISystem extends BaseComponentSystem {
      * @param entity    The entity being activated
      * @param component The flag workstation component
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
     public void workstationCraftRequested(ActivateEvent event, EntityRef entity, CraftingWorkstationComponent component) {
         if (!event.isConsumed()) {
             nuiManager.toggleScreen("BasicCrafting:BaseListCraftingScreen");
